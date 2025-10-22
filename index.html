@@ -102,16 +102,12 @@
                                 <small class="hint">不同地区税制、法规不同，请根据业务需求选择</small>
                             </div>
 
-                            <div class="form-group" id="stateGroup" style="display: none;">
-                                <label for="state">美国州选择 <span class="required">*</span></label>
-                                <select id="state" name="state">
-                                    <option value="">请选择州</option>
-                                    <option value="DE">特拉华州 (Delaware) - 最快1-3天</option>
-                                    <option value="WY">怀俄明州 (Wyoming) - 3-5天</option>
-                                    <option value="NV">内华达州 (Nevada) - 5-7天</option>
-                                    <option value="CA">加利福尼亚州 (California) - 10-15天</option>
-                                    <option value="NY">纽约州 (New York) - 10-20天</option>
+                            <div class="form-group" id="subRegionGroup" style="display: none;">
+                                <label for="subRegion"><span id="subRegionLabel">城市/地区</span> <span class="required">*</span></label>
+                                <select id="subRegion" name="subRegion">
+                                    <option value="">请选择</option>
                                 </select>
+                                <small class="hint" id="subRegionHint">不同城市/地区的注册时效和费用可能不同</small>
                             </div>
                         </div>
 

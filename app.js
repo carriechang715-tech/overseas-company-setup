@@ -16,13 +16,78 @@ function initializeForm() {
     
     // 监听注册地变化
     jurisdiction.addEventListener('change', function() {
-        const stateGroup = document.getElementById('stateGroup');
-        if (this.value === 'US') {
-            stateGroup.style.display = 'block';
-        } else {
-            stateGroup.style.display = 'none';
-        }
+        handleJurisdictionChange(this.value);
     });
+}
+
+// 处理注册地变化
+function handleJurisdictionChange(jurisdictionCode) {
+    const subRegionGroup = document.getElementById('subRegionGroup');
+    const subRegionSelect = document.getElementById('subRegion');
+    const subRegionLabel = document.getElementById('subRegionLabel');
+    const subRegionHint = document.getElementById('subRegionHint');
+    
+    if (!jurisdictionCode || !JURISDICTIONS[jurisdictionCode]) {
+        subRegionGroup.style.display = 'none';
+        return;
+    }
+    
+    const jurisdiction = JURISDICTIONS[jurisdictionCode];
+    
+    // 检查是否有子地区
+    if (jurisdiction.hasSubRegions && jurisdiction.subRegions) {
+        // 显示子地区选择框
+        subRegionGroup.style.display = 'block';
+        
+        // 更新标签
+        if (jurisdictionCode === 'US') {
+            subRegionLabel.textContent = '州/城市';
+            subRegionHint.textContent = '不同州的注册时效和税率差异较大，请根据业务需求选择';
+        } else if (jurisdictionCode === 'CA') {
+            subRegionLabel.textContent = '省/城市';
+            subRegionHint.textContent = '不同省份的税率和政策有所不同';
+        } else if (jurisdictionCode === 'AU') {
+            subRegionLabel.textContent = '州/城市';
+            subRegionHint.textContent = '不同州的政策和营商环境有所差异';
+        } else {
+            subRegionLabel.textContent = '城市/地区';
+            subRegionHint.textContent = '不同城市/地区的注册时效和费用可能不同';
+        }
+        
+        // 清空并重新填充选项
+        subRegionSelect.innerHTML = '<option value="">请选择</option>';
+        
+        // 按照popular先后排序
+        const regions = Object.entries(jurisdiction.subRegions).sort((a, b) => {
+            if (a[1].popular === b[1].popular) return 0;
+            return a[1].popular ? -1 : 1;
+        });
+        
+        regions.forEach(([code, region]) => {
+            const option = document.createElement('option');
+            option.value = code;
+            
+            // 构建选项文本
+            let text = region.name;
+            if (region.days) {
+                text += ` - ${region.days}天`;
+            }
+            if (region.tax) {
+                text += ` (税率: ${region.tax})`;
+            }
+            if (region.popular) {
+                text = '★ ' + text;
+            }
+            
+            option.textContent = text;
+            option.title = region.description || '';
+            subRegionSelect.appendChild(option);
+        });
+    } else {
+        // 隐藏子地区选择框
+        subRegionGroup.style.display = 'none';
+        subRegionSelect.value = '';
+    }
 }
 
 // 设置事件监听
@@ -40,7 +105,7 @@ function handleFormSubmit() {
     // 收集表单数据
     formData = {
         jurisdiction: document.getElementById('jurisdiction').value,
-        state: document.getElementById('state').value,
+        subRegion: document.getElementById('subRegion').value || null,
         companyName: document.getElementById('companyName').value,
         companyType: document.getElementById('companyType').value,
         businessScope: document.getElementById('businessScope').value,
@@ -192,14 +257,26 @@ function showTimeline() {
     const timeline = generateTimeline(
         formData.jurisdiction,
         selectedSupplier,
-        { toCountry: formData.deliveryCountry, state: formData.state }
+        { 
+            toCountry: formData.deliveryCountry, 
+            subRegion: formData.subRegion 
+        }
     );
     
     const container = document.querySelector('.timeline-container');
     
+    // 构建地区显示文本
+    let jurisdictionDisplay = `${timeline.jurisdiction.flag} ${timeline.jurisdiction.name}`;
+    if (formData.subRegion && timeline.jurisdiction.subRegions) {
+        const subRegion = timeline.jurisdiction.subRegions[formData.subRegion];
+        if (subRegion) {
+            jurisdictionDisplay += ` - ${subRegion.name}`;
+        }
+    }
+    
     let html = `
         <div class="timeline-header">
-            <h2>📅 设立流程时间线 - ${timeline.jurisdiction.flag} ${timeline.jurisdiction.name}</h2>
+            <h2>📅 设立流程时间线 - ${jurisdictionDisplay}</h2>
             <div class="timeline-summary">
                 <div class="summary-item">
                     <span class="label">总工作日</span>

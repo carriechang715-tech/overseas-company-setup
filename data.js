@@ -16,7 +16,13 @@ const JURISDICTIONS = {
         minCapital: '无最低要求',
         description: '国际金融中心，税制简单，注册便捷',
         advantages: ['低税率', '无外汇管制', '法律体系健全', '地理位置优越'],
-        avgSetupDays: 5
+        avgSetupDays: 5,
+        hasSubRegions: true,
+        subRegions: {
+            'HK_ISLAND': { name: '香港岛', days: 5, popular: true },
+            'KOWLOON': { name: '九龙', days: 5, popular: true },
+            'NT': { name: '新界', days: 5, popular: false }
+        }
     },
     'SG': {
         name: '新加坡',
@@ -26,12 +32,18 @@ const JURISDICTIONS = {
         language: ['英文', '中文', '马来文', '泰米尔文'],
         timezone: 'GMT+8',
         workingDays: 5,
-        holidays: ['新年', '春节', '耶稣受难日', '劳动节', '卫塞节', '开斋节', '国庆日', '屠妖节', '圣诞节'],
+        holidays: ['新年', '春节', '耶稣受难日', '劳动节', '卫塞节', '开斋节', '国庆日', '屠厖节', '圣诞节'],
         taxRate: '17%',
         minCapital: 'SGD 1',
         description: '亚洲金融中心，营商环境优越',
         advantages: ['政治稳定', '税务优惠', '国际声誉好', '基础设施完善'],
-        avgSetupDays: 8
+        avgSetupDays: 8,
+        hasSubRegions: true,
+        subRegions: {
+            'CENTRAL': { name: '中心区', days: 8, popular: true },
+            'MARINA': { name: '滨海湾金融中心', days: 8, popular: true },
+            'JURONG': { name: '裕廊工业区', days: 8, popular: false }
+        }
     },
     'JP': {
         name: '日本',
@@ -46,7 +58,14 @@ const JURISDICTIONS = {
         minCapital: 'JPY 1',
         description: '亚洲第二大经济体，技术先进',
         advantages: ['市场成熟', '技术领先', '法律完善', '信誉度高'],
-        avgSetupDays: 14
+        avgSetupDays: 14,
+        hasSubRegions: true,
+        subRegions: {
+            'TOKYO': { name: '东京 (Tokyo)', days: 14, popular: true, description: '首都，经济中心' },
+            'OSAKA': { name: '大阪 (Osaka)', days: 14, popular: true, description: '商业中心，关西门户' },
+            'NAGOYA': { name: '名古屋 (Nagoya)', days: 14, popular: false, description: '工业中心，汽车产业' },
+            'FUKUOKA': { name: '福冈 (Fukuoka)', days: 14, popular: false, description: '九州中心，创业友好' }
+        }
     },
     'KR': {
         name: '韩国',
@@ -198,7 +217,14 @@ const JURISDICTIONS = {
         minCapital: '£1',
         description: '欧洲金融中心，法律制度完善',
         advantages: ['法律健全', '金融发达', '国际认可度高', '英语国家'],
-        avgSetupDays: 6
+        avgSetupDays: 6,
+        hasSubRegions: true,
+        subRegions: {
+            'LONDON': { name: '伦敦 (London)', days: 6, popular: true, description: '金融中心，国际化' },
+            'MANCHESTER': { name: '曼彻斯特 (Manchester)', days: 6, popular: false, description: '北部中心，科技产业' },
+            'EDINBURGH': { name: '爱丁堡 (Edinburgh)', days: 6, popular: false, description: '苏格兰首府，金融中心' },
+            'BIRMINGHAM': { name: '伯明翰 (Birmingham)', days: 6, popular: false, description: '工业中心' }
+        }
     },
     'DE': {
         name: '德国',
@@ -366,14 +392,18 @@ const JURISDICTIONS = {
         description: '全球最大经济体，商业机会多',
         advantages: ['市场巨大', '融资便利', '法律保护', '品牌效应'],
         avgSetupDays: 12,
-        states: {
-            'DE': { name: '特拉华州', days: 2, tax: '无州税' },
-            'WY': { name: '怀俄明州', days: 4, tax: '无州税' },
-            'NV': { name: '内华达州', days: 6, tax: '无州税' },
-            'CA': { name: '加利福尼亚州', days: 12, tax: '8.84%' },
-            'NY': { name: '纽约州', days: 15, tax: '6.5%' },
-            'FL': { name: '佛罗里达州', days: 8, tax: '5.5%' },
-            'TX': { name: '德克萨斯州', days: 10, tax: '无州税' }
+        hasSubRegions: true,
+        subRegions: {
+            'DE': { name: '特拉华州 (Delaware)', days: 2, tax: '无州税', popular: true, description: '最佳注册地，公司法完善' },
+            'WY': { name: '怀俄明州 (Wyoming)', days: 4, tax: '无州税', popular: true, description: '隐私保护好，低成本' },
+            'NV': { name: '内华达州 (Nevada)', days: 6, tax: '无州税', popular: true, description: '无州税，隐私保护' },
+            'CA': { name: '加利福尼亚州 (California)', days: 12, tax: '8.84%', popular: true, description: '科技中心，市场巨大' },
+            'NY': { name: '纽约州 (New York)', days: 15, tax: '6.5%', popular: true, description: '金融中心，品牌效应' },
+            'FL': { name: '佛罗里达州 (Florida)', days: 8, tax: '5.5%', popular: false, description: '无个人所得税，旅游业' },
+            'TX': { name: '德克萨斯州 (Texas)', days: 10, tax: '无州税', popular: false, description: '能源中心，无州税' },
+            'WA': { name: '华盛顿州 (Washington)', days: 10, tax: '无州税', popular: false, description: '科技产业，无州税' },
+            'CO': { name: '科罗拉多州 (Colorado)', days: 12, tax: '4.63%', popular: false, description: '创新中心，生活质量高' },
+            'MA': { name: '马萨诸塞州 (Massachusetts)', days: 14, tax: '8%', popular: false, description: '教育中心，生物医药' }
         }
     },
     'CA': {
@@ -389,7 +419,14 @@ const JURISDICTIONS = {
         minCapital: 'CAD 1',
         description: 'G7成员，生活质量高',
         advantages: ['政治稳定', '资源丰富', '移民友好', '邻近美国'],
-        avgSetupDays: 10
+        avgSetupDays: 10,
+        hasSubRegions: true,
+        subRegions: {
+            'ON': { name: '安大略省-多伦多 (Toronto, ON)', days: 10, popular: true, description: '最大城市，金融中心' },
+            'BC': { name: '不列颠哥伦比亚省-温哥华 (Vancouver, BC)', days: 10, popular: true, description: '西海岸中心，亚太门户' },
+            'QC': { name: '魁北克省-蒙特利尔 (Montreal, QC)', days: 10, popular: false, description: '法语区，文化中心' },
+            'AB': { name: '阿尔伯塔省-卡尔加里 (Calgary, AB)', days: 10, popular: false, description: '能源中心，无省税' }
+        }
     },
     'MX': {
         name: '墨西哥',
@@ -451,7 +488,14 @@ const JURISDICTIONS = {
         minCapital: 'AUD 1',
         description: '亚太重要经济体，资源丰富',
         advantages: ['经济稳定', '法律健全', '资源丰富', '地理优势'],
-        avgSetupDays: 10
+        avgSetupDays: 10,
+        hasSubRegions: true,
+        subRegions: {
+            'NSW': { name: '新南威尔士州-悉尼 (Sydney, NSW)', days: 10, popular: true, description: '最大城市，金融中心' },
+            'VIC': { name: '维多利亚州-墨尔本 (Melbourne, VIC)', days: 10, popular: true, description: '文化中心，创新城市' },
+            'QLD': { name: '昆士兰州-布里斯班 (Brisbane, QLD)', days: 10, popular: false, description: '旅游业，自然资源' },
+            'WA': { name: '西澳州-珀斯 (Perth, WA)', days: 10, popular: false, description: '矿产资源，能源中心' }
+        }
     },
     'NZ': {
         name: '新西兰',
