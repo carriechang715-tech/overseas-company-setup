@@ -12,6 +12,9 @@
         <header class="app-header">
             <h1>🌍 境外公司设立服务平台</h1>
             <p>智能匹配供应商 · 可视化流程管理 · 精准时效预估</p>
+            <div class="header-notice">
+                💡 本平台主要用于<strong>评估时效和费用</strong>，股东和董事信息为可选填写
+            </div>
         </header>
 
         <main class="app-main">
@@ -108,8 +111,9 @@
                         </div>
 
                         <!-- 股东信息 -->
-                        <div class="form-section">
-                            <h3>👥 股东信息</h3>
+                        <div class="form-section optional-section">
+                            <h3>👥 股东信息 <span class="optional-badge">可选</span></h3>
+                            <p class="section-note">💡 以下信息可不填写，仅用于获取更准确的评估结果</p>
                             <div id="shareholdersContainer">
                                 <div class="shareholder-item" data-index="0">
                                     <div class="item-header">
@@ -117,30 +121,31 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group">
-                                            <label>股东类型 <span class="required">*</span></label>
-                                            <select name="shareholderType[]" class="shareholderType" required>
+                                            <label>股东类型</label>
+                                            <select name="shareholderType[]" class="shareholderType">
+                                                <option value="">请选择</option>
                                                 <option value="individual">个人</option>
                                                 <option value="corporate">公司</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label>姓名/公司名 <span class="required">*</span></label>
-                                            <input type="text" name="shareholderName[]" placeholder="Full Name / Company Name" required>
+                                            <label>姓名/公司名</label>
+                                            <input type="text" name="shareholderName[]" placeholder="Full Name / Company Name">
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group">
-                                            <label>国籍/注册地 <span class="required">*</span></label>
-                                            <input type="text" name="shareholderNationality[]" placeholder="China" required>
+                                            <label>国籍/注册地</label>
+                                            <input type="text" name="shareholderNationality[]" placeholder="China">
                                         </div>
                                         <div class="form-group">
-                                            <label>持股比例 (%) <span class="required">*</span></label>
-                                            <input type="number" name="shareholderPercentage[]" min="0" max="100" step="0.01" placeholder="50" required>
+                                            <label>持股比例 (%)</label>
+                                            <input type="number" name="shareholderPercentage[]" min="0" max="100" step="0.01" placeholder="50">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>地址 <span class="required">*</span></label>
-                                        <input type="text" name="shareholderAddress[]" placeholder="Complete Address" required>
+                                        <label>地址</label>
+                                        <input type="text" name="shareholderAddress[]" placeholder="Complete Address">
                                     </div>
                                     <div class="form-group">
                                         <label>身份证明文件</label>
@@ -156,8 +161,9 @@
                         </div>
 
                         <!-- 董事信息 -->
-                        <div class="form-section">
-                            <h3>👤 董事信息</h3>
+                        <div class="form-section optional-section">
+                            <h3>👤 董事信息 <span class="optional-badge">可选</span></h3>
+                            <p class="section-note">💡 以下信息可不填写，仅用于获取更准确的评估结果</p>
                             <div id="directorsContainer">
                                 <div class="director-item" data-index="0">
                                     <div class="item-header">
@@ -165,17 +171,17 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group">
-                                            <label>姓名 <span class="required">*</span></label>
-                                            <input type="text" name="directorName[]" placeholder="Full Name" required>
+                                            <label>姓名</label>
+                                            <input type="text" name="directorName[]" placeholder="Full Name">
                                         </div>
                                         <div class="form-group">
-                                            <label>国籍 <span class="required">*</span></label>
-                                            <input type="text" name="directorNationality[]" placeholder="China" required>
+                                            <label>国籍</label>
+                                            <input type="text" name="directorNationality[]" placeholder="China">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>地址 <span class="required">*</span></label>
-                                        <input type="text" name="directorAddress[]" placeholder="Complete Address" required>
+                                        <label>地址</label>
+                                        <input type="text" name="directorAddress[]" placeholder="Complete Address">
                                     </div>
                                     <div class="form-group">
                                         <label>联系方式</label>
@@ -263,7 +269,7 @@
         </main>
 
         <footer class="app-footer">
-            <p>💡 提示：所有信息仅用于评估，实际设立需与供应商确认</p>
+            <p>💡 提示：本平台主要用于<strong>评估时效和费用</strong>，不需要填写所有详细信息。实际设立需与供应商确认。</p>
         </footer>
     </div>
 

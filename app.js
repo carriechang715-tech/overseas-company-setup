@@ -59,32 +59,42 @@ function handleFormSubmit() {
     goToStep(2);
 }
 
-// 收集股东信息
+// 收集股东信息（可选）
 function collectShareholders() {
     const shareholders = [];
     document.querySelectorAll('.shareholder-item').forEach(item => {
-        const index = item.dataset.index;
-        shareholders.push({
-            type: item.querySelector('.shareholderType').value,
-            name: item.querySelector('[name="shareholderName[]"]').value,
-            nationality: item.querySelector('[name="shareholderNationality[]"]').value,
-            percentage: item.querySelector('[name="shareholderPercentage[]"]').value,
-            address: item.querySelector('[name="shareholderAddress[]"]').value
-        });
+        const name = item.querySelector('[name="shareholderName[]"]').value.trim();
+        const type = item.querySelector('.shareholderType').value;
+        
+        // 只收集填写了名称的股东
+        if (name) {
+            shareholders.push({
+                type: type || 'individual',
+                name: name,
+                nationality: item.querySelector('[name="shareholderNationality[]"]').value.trim(),
+                percentage: item.querySelector('[name="shareholderPercentage[]"]').value,
+                address: item.querySelector('[name="shareholderAddress[]"]').value.trim()
+            });
+        }
     });
     return shareholders;
 }
 
-// 收集董事信息
+// 收集董事信息（可选）
 function collectDirectors() {
     const directors = [];
     document.querySelectorAll('.director-item').forEach(item => {
-        directors.push({
-            name: item.querySelector('[name="directorName[]"]').value,
-            nationality: item.querySelector('[name="directorNationality[]"]').value,
-            address: item.querySelector('[name="directorAddress[]"]').value,
-            email: item.querySelector('[name="directorEmail[]"]').value
-        });
+        const name = item.querySelector('[name="directorName[]"]').value.trim();
+        
+        // 只收集填写了名称的董事
+        if (name) {
+            directors.push({
+                name: name,
+                nationality: item.querySelector('[name="directorNationality[]"]').value.trim(),
+                address: item.querySelector('[name="directorAddress[]"]').value.trim(),
+                email: item.querySelector('[name="directorEmail[]"]').value.trim()
+            });
+        }
     });
     return directors;
 }
