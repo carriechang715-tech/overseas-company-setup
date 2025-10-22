@@ -14,14 +14,95 @@ document.addEventListener('DOMContentLoaded', function() {
 // 初始化表单
 function initializeForm() {
     const jurisdiction = document.getElementById('jurisdiction');
+    const deliveryCountry = document.getElementById('deliveryCountry');
     
     // 监听注册地变化
     jurisdiction.addEventListener('change', function() {
         handleJurisdictionChange(this.value);
     });
     
+    // 监听收件国家变化
+    deliveryCountry.addEventListener('change', function() {
+        handleDeliveryCountryChange(this.value);
+    });
+    
     // 初始化时加载默认公司类型
     updateCompanyTypes(DEFAULT_COMPANY_TYPES);
+    
+    // 初始化收件城市选项
+    handleDeliveryCountryChange('CN');
+}
+
+// 处理收件国家变化
+function handleDeliveryCountryChange(countryCode) {
+    const deliveryCitySelect = document.getElementById('deliveryCity');
+    
+    // 城市数据定义
+    const DELIVERY_CITIES = {
+        'CN': [
+            { value: 'Beijing', label: '北京 Beijing' },
+            { value: 'Shanghai', label: '上海 Shanghai' },
+            { value: 'Guangzhou', label: '广州 Guangzhou' },
+            { value: 'Shenzhen', label: '深圳 Shenzhen' },
+            { value: 'Chengdu', label: '成都 Chengdu' },
+            { value: 'Hangzhou', label: '杭州 Hangzhou' },
+            { value: 'Wuhan', label: '武汉 Wuhan' },
+            { value: 'Chongqing', label: '重庆 Chongqing' },
+            { value: 'Xian', label: '西安 Xi\'an' },
+            { value: 'Nanjing', label: '南京 Nanjing' }
+        ],
+        'HK': [
+            { value: 'Hong Kong Island', label: 'Hong Kong Island (香港岛)' },
+            { value: 'Kowloon', label: 'Kowloon (九龙)' },
+            { value: 'New Territories', label: 'New Territories (新界)' }
+        ],
+        'SG': [
+            { value: 'Singapore', label: 'Singapore (新加坡)' }
+        ],
+        'US': [
+            { value: 'New York', label: 'New York (纽约)' },
+            { value: 'Los Angeles', label: 'Los Angeles (洛杉矶)' },
+            { value: 'Chicago', label: 'Chicago (芝加哥)' },
+            { value: 'San Francisco', label: 'San Francisco (旧金山)' },
+            { value: 'Seattle', label: 'Seattle (西雅图)' },
+            { value: 'Boston', label: 'Boston (波士顿)' }
+        ],
+        'UK': [
+            { value: 'London', label: 'London (伦敦)' },
+            { value: 'Manchester', label: 'Manchester (曼彻斯特)' },
+            { value: 'Birmingham', label: 'Birmingham (伯明翰)' },
+            { value: 'Edinburgh', label: 'Edinburgh (爱丁堡)' }
+        ],
+        'JP': [
+            { value: 'Tokyo', label: 'Tokyo (东京)' },
+            { value: 'Osaka', label: 'Osaka (大阪)' },
+            { value: 'Kyoto', label: 'Kyoto (京都)' },
+            { value: 'Yokohama', label: 'Yokohama (横滨)' }
+        ],
+        'AU': [
+            { value: 'Sydney', label: 'Sydney (悉尼)' },
+            { value: 'Melbourne', label: 'Melbourne (墨尔本)' },
+            { value: 'Brisbane', label: 'Brisbane (布里斯班)' },
+            { value: 'Perth', label: 'Perth (珀斯)' }
+        ],
+        'CA': [
+            { value: 'Toronto', label: 'Toronto (多伦多)' },
+            { value: 'Vancouver', label: 'Vancouver (温哥华)' },
+            { value: 'Montreal', label: 'Montreal (蒙特利尔)' },
+            { value: 'Calgary', label: 'Calgary (卡尔加里)' }
+        ]
+    };
+    
+    // 清空并重新填充城市选项
+    deliveryCitySelect.innerHTML = '<option value="">Please select (请选择)</option>';
+    
+    const cities = DELIVERY_CITIES[countryCode] || [];
+    cities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city.value;
+        option.textContent = city.label;
+        deliveryCitySelect.appendChild(option);
+    });
 }
 
 // 处理注册地变化
@@ -187,10 +268,9 @@ function handleFormSubmit() {
         companyType: document.getElementById('companyType').value,
         businessScope: document.getElementById('businessScope').value,
         registeredCapital: document.getElementById('registeredCapital').value,
-        fiscalYearEnd: document.getElementById('fiscalYearEnd').value,
         needRegisteredAddress: document.getElementById('needRegisteredAddress').checked,
         deliveryCountry: document.getElementById('deliveryCountry').value,
-        deliveryAddress: document.getElementById('deliveryAddress').value,
+        deliveryCity: document.getElementById('deliveryCity').value,
         shareholders: collectShareholders(),
         directors: collectDirectors(),
         services: collectServices()
@@ -201,44 +281,36 @@ function handleFormSubmit() {
     goToStep(2);
 }
 
-// 收集股东信息（可选）
+// 收集股东信息（简化版）
 function collectShareholders() {
-    const shareholders = [];
-    document.querySelectorAll('.shareholder-item').forEach(item => {
-        const name = item.querySelector('[name="shareholderName[]"]').value.trim();
-        const type = item.querySelector('.shareholderType').value;
-        
-        // 只收集填写了名称的股东
-        if (name) {
-            shareholders.push({
-                type: type || 'individual',
-                name: name,
-                nationality: item.querySelector('[name="shareholderNationality[]"]').value.trim(),
-                percentage: item.querySelector('[name="shareholderPercentage[]"]').value,
-                address: item.querySelector('[name="shareholderAddress[]"]').value.trim()
-            });
-        }
-    });
-    return shareholders;
+    const count = document.getElementById('shareholderCount')?.value;
+    const nationality = document.getElementById('shareholderNationality')?.value;
+    
+    if (!count || count === '' || count === '0') {
+        return [];
+    }
+    
+    // 返回简化的股东信息
+    return [{
+        count: parseInt(count),
+        nationality: nationality || 'Unknown'
+    }];
 }
 
-// 收集董事信息（可选）
+// 收集董事信息（简化版）
 function collectDirectors() {
-    const directors = [];
-    document.querySelectorAll('.director-item').forEach(item => {
-        const name = item.querySelector('[name="directorName[]"]').value.trim();
-        
-        // 只收集填写了名称的董事
-        if (name) {
-            directors.push({
-                name: name,
-                nationality: item.querySelector('[name="directorNationality[]"]').value.trim(),
-                address: item.querySelector('[name="directorAddress[]"]').value.trim(),
-                email: item.querySelector('[name="directorEmail[]"]').value.trim()
-            });
-        }
-    });
-    return directors;
+    const count = document.getElementById('directorCount')?.value;
+    const nationality = document.getElementById('directorNationality')?.value;
+    
+    if (!count || count === '' || count === '0') {
+        return [];
+    }
+    
+    // 返回简化的董事信息
+    return [{
+        count: parseInt(count),
+        nationality: nationality || 'Unknown'
+    }];
 }
 
 // 收集服务
@@ -381,10 +453,10 @@ function showTimeline() {
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 14px;">
                     ${formData.companyName ? `<div><strong>Company Name (公司名称):</strong> ${formData.companyName}</div>` : ''}
                     ${formData.companyType ? `<div><strong>Company Type (公司类型):</strong> ${formData.companyType}</div>` : ''}
-                    ${formData.shareholders && formData.shareholders.length > 0 ? `<div><strong>Shareholders (股东):</strong> ${formData.shareholders.length} person(s) (位)</div>` : '<div><strong>Shareholders (股东):</strong> Not specified (未填写)</div>'}
-                    ${formData.directors && formData.directors.length > 0 ? `<div><strong>Directors (董事):</strong> ${formData.directors.length} person(s) (位)</div>` : '<div><strong>Directors (董事):</strong> Not specified (未填写)</div>'}
+                    ${formData.shareholders && formData.shareholders.length > 0 && formData.shareholders[0].count ? `<div><strong>Shareholders (股东):</strong> ${formData.shareholders[0].count} person(s) (位)${formData.shareholders[0].nationality !== 'Unknown' ? ` - ${formData.shareholders[0].nationality}` : ''}</div>` : '<div><strong>Shareholders (股东):</strong> Not specified (未填写)</div>'}
+                    ${formData.directors && formData.directors.length > 0 && formData.directors[0].count ? `<div><strong>Directors (董事):</strong> ${formData.directors[0].count} person(s) (位)${formData.directors[0].nationality !== 'Unknown' ? ` - ${formData.directors[0].nationality}` : ''}</div>` : '<div><strong>Directors (董事):</strong> Not specified (未填写)</div>'}
                     ${formData.services && formData.services.length > 0 ? `<div><strong>Additional Services (额外服务):</strong> ${formData.services.length} service(s) (项)</div>` : '<div><strong>Additional Services (额外服务):</strong> None (无)</div>'}
-                    ${formData.deliveryCountry ? `<div><strong>Delivery to (邮寄到):</strong> ${formData.deliveryCountry}</div>` : ''}
+                    ${formData.deliveryCountry ? `<div><strong>Delivery to (邮寄到):</strong> ${formData.deliveryCity ? formData.deliveryCity + ', ' : ''}${formData.deliveryCountry}</div>` : ''}
                 </div>
                 <p style="margin-bottom: 0; margin-top: 10px; color: #0369a1; font-size: 13px;">
                     👉 The timeline below is dynamically calculated based on your selections. Different regions, number of shareholders/directors, and additional services will affect the total time required.

@@ -38,8 +38,12 @@ function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData
     
     // 股东董事数量影响系数
     let documentPrepMultiplier = 1.0;
-    const shareholderCount = formData.shareholders ? formData.shareholders.length : 0;
-    const directorCount = formData.directors ? formData.directors.length : 0;
+    const shareholderCount = formData.shareholders && formData.shareholders.length > 0 && formData.shareholders[0].count 
+        ? formData.shareholders[0].count 
+        : 0;
+    const directorCount = formData.directors && formData.directors.length > 0 && formData.directors[0].count 
+        ? formData.directors[0].count 
+        : 0;
     
     // 每增加一个股东/董事，文件准备时间增加10%
     if (shareholderCount > 2) {
@@ -47,6 +51,20 @@ function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData
     }
     if (directorCount > 1) {
         documentPrepMultiplier += (directorCount - 1) * 0.1;
+    }
+    
+    // 跨国股东/董事额外增加时间（需要海外公证）
+    if (formData.shareholders && formData.shareholders.length > 0) {
+        const shareholderNationality = formData.shareholders[0].nationality;
+        if (shareholderNationality && shareholderNationality !== jurisdiction && shareholderNationality !== 'Unknown') {
+            documentPrepMultiplier += 0.2; // 海外股东增加20%时间
+        }
+    }
+    if (formData.directors && formData.directors.length > 0) {
+        const directorNationality = formData.directors[0].nationality;
+        if (directorNationality && directorNationality !== jurisdiction && directorNationality !== 'Unknown') {
+            documentPrepMultiplier += 0.15; // 海外董事增加15%时间
+        }
     }
     
     let currentDay = 0;
@@ -341,9 +359,10 @@ function calculateCalendarDays(workingDays, jurisdiction) {
     return workingDays + weekendDays + holidayDays;
 }
 
-// 匹配供应商（基于用户需求智能推荐，最多3个）
+// 匹配供应商（基于用户需求智能推荐，至少3个）
 function matchSuppliers(jurisdiction, formData = {}) {
-    const filtered = SUPPLIERS.filter(supplier => 
+    // 第一步：过滤出有该地区专长的供应商
+    let filtered = SUPPLIERS.filter(supplier => 
         supplier.specialties.includes(jurisdiction)
     ).map(supplier => {
         let matchScore = 0;
@@ -367,6 +386,9 @@ function matchSuppliers(jurisdiction, formData = {}) {
             if (services.includes('trademark') && supplier.certifications.some(cert => cert.includes('商标'))) {
                 matchScore += 10;
             }
+            if (services.includes('accounting') && supplier.advantages.some(adv => adv.includes('记账') || adv.includes('财务'))) {
+                matchScore += 10;
+            }
         }
         
         // 地区匹配加分：优先推荐该地区经验丰富的供应商
@@ -378,6 +400,17 @@ function matchSuppliers(jurisdiction, formData = {}) {
         }
         if (supplier.id === 'supplier_c' && ['HK', 'SG', 'US', 'UK'].includes(jurisdiction)) {
             matchScore += 10;
+        }
+        
+        // 复杂度加分：跨国股东/董事需要更专业的服务
+        if (formData.shareholders && formData.shareholders.length > 0 && formData.shareholders[0].nationality) {
+            const shareholderNationality = formData.shareholders[0].nationality;
+            if (shareholderNationality !== jurisdiction && shareholderNationality !== 'Unknown') {
+                // 优先推荐有国际业务经验的供应商
+                if (supplier.experience >= 10) {
+                    matchScore += 8;
+                }
+            }
         }
         
         return {
@@ -392,8 +425,21 @@ function matchSuppliers(jurisdiction, formData = {}) {
         return scoreB - scoreA;
     });
     
-    // 最多返回3个供应商
-    return filtered.slice(0, 3);
+    // 如果过滤后少于3个，尝试添加其他供应商
+    if (filtered.length < 3) {
+        const remainingSuppliers = SUPPLIERS.filter(supplier => 
+            !supplier.specialties.includes(jurisdiction)
+        ).map(supplier => ({
+            ...supplier,
+            price: supplier.price[jurisdiction] || { service: 8000, government: 2000, total: 10000 },
+            matchScore: 10 // 低匹配分
+        }));
+        
+        filtered = [...filtered, ...remainingSuppliers].slice(0, 3);
+    }
+    
+    // 确保至少返回3个供应商
+    return filtered.slice(0, Math.max(3, filtered.length));
 }
 
 // 生成流程时间线数据(基于用户表单数据动态评估)
@@ -406,19 +452,26 @@ function generateTimeline(jurisdiction, supplierId, deliveryInfo, formData = {})
     ];
     
     // 根据用户填写的股东董事数量添加风险提示
-    if (formData.shareholders && formData.shareholders.length > 3) {
+    const shareholderCount = formData.shareholders && formData.shareholders.length > 0 && formData.shareholders[0].count 
+        ? formData.shareholders[0].count 
+        : 0;
+    const directorCount = formData.directors && formData.directors.length > 0 && formData.directors[0].count 
+        ? formData.directors[0].count 
+        : 0;
+        
+    if (shareholderCount > 3) {
         risks.push({
             level: 'warning',
             title: 'Multiple Shareholders (多股东提示)',
-            content: `You have ${formData.shareholders.length} shareholders, which may require additional time for document preparation and notarization (您有${formData.shareholders.length}位股东,文件准备和公证可能需要额外时间)`
+            content: `You have ${shareholderCount} shareholders, which may require additional time for document preparation and notarization (您有${shareholderCount}位股东,文件准备和公证可能需要额外时间)`
         });
     }
     
-    if (formData.directors && formData.directors.length > 2) {
+    if (directorCount > 2) {
         risks.push({
             level: 'info',
             title: 'Multiple Directors (多董事说明)',
-            content: `You have ${formData.directors.length} directors, please ensure all directors' documents are complete (您有${formData.directors.length}位董事,请确保所有董事的文件齐全)`
+            content: `You have ${directorCount} directors, please ensure all directors' documents are complete (您有${directorCount}位董事,请确保所有董事的文件齐全)`
         });
     }
     

@@ -136,99 +136,63 @@
                                 <textarea id="businessScope" name="businessScope" rows="3" placeholder="Please briefly describe your main business scope (请简述公司主营业务范围)" required></textarea>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="registeredCapital">Registered Capital (注册资本)</label>
-                                    <input type="text" id="registeredCapital" name="registeredCapital" placeholder="e.g.: 10,000 USD">
-                                    <small class="hint">Some jurisdictions have no minimum capital requirement (部分地区无最低资本要求)</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="fiscalYearEnd">Fiscal Year End (财政年度结束日)</label>
-                                    <input type="text" id="fiscalYearEnd" name="fiscalYearEnd" placeholder="e.g.: December 31">
-                                </div>
+                            <div class="form-group">
+                                <label for="registeredCapital">Registered Capital (注册资本)</label>
+                                <input type="text" id="registeredCapital" name="registeredCapital" placeholder="e.g.: 10,000 USD">
+                                <small class="hint">Some jurisdictions have no minimum capital requirement (部分地区无最低资本要求)</small>
                             </div>
                         </div>
 
                         <!-- 股东信息 -->
                         <div class="form-section optional-section">
                             <h3>👥 Shareholder Information (股东信息) <span class="optional-badge">Optional (可选)</span></h3>
-                            <p class="section-note">💡 The following information is optional, only for more accurate estimation (以下信息可不填写，仅用于获取更准确的评估结果)</p>
-                            <div id="shareholdersContainer">
-                                <div class="shareholder-item" data-index="0">
-                                    <div class="item-header">
-                                        <h4>Shareholder (股东) #1</h4>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Shareholder Type (股东类型)</label>
-                                            <select name="shareholderType[]" class="shareholderType">
-                                                <option value="">Please select (请选择)</option>
-                                                <option value="individual">Individual (个人)</option>
-                                                <option value="corporate">Corporate (公司)</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Name/Company Name (姓名/公司名)</label>
-                                            <input type="text" name="shareholderName[]" placeholder="Full Name / Company Name">
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Nationality/Jurisdiction (国籍/注册地)</label>
-                                            <input type="text" name="shareholderNationality[]" placeholder="China">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Shareholding Percentage (持股比例) (%)</label>
-                                            <input type="number" name="shareholderPercentage[]" min="0" max="100" step="0.01" placeholder="50">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Address (地址)</label>
-                                        <input type="text" name="shareholderAddress[]" placeholder="Complete Address">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Identification Documents (身份证明文件)</label>
-                                        <div class="checkbox-group">
-                                            <label><input type="checkbox" name="shareholderDocs[]" value="passport"> Passport Copy (护照复印件)</label>
-                                            <label><input type="checkbox" name="shareholderDocs[]" value="id"> ID Card Copy (身份证复印件)</label>
-                                            <label><input type="checkbox" name="shareholderDocs[]" value="address"> Proof of Address (地址证明)</label>
-                                        </div>
-                                    </div>
+                            <p class="section-note">💡 Only for timeline estimation, not required (仅用于时效评估，非必填)</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Number of Shareholders (股东人数)</label>
+                                    <input type="number" id="shareholderCount" name="shareholderCount" min="1" max="50" placeholder="e.g.: 2">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nationality/Location (国籍/所在地)</label>
+                                    <select id="shareholderNationality" name="shareholderNationality">
+                                        <option value="">Please select (请选择)</option>
+                                        <option value="CN">🇨🇳 China (中国)</option>
+                                        <option value="HK">🇭🇰 Hong Kong (香港)</option>
+                                        <option value="US">🇺🇸 United States (美国)</option>
+                                        <option value="UK">🇬🇧 United Kingdom (英国)</option>
+                                        <option value="SG">🇸🇬 Singapore (新加坡)</option>
+                                        <option value="JP">🇯🇵 Japan (日本)</option>
+                                        <option value="KR">🇰🇷 Korea (韩国)</option>
+                                        <option value="Other">🌍 Other (其他)</option>
+                                    </select>
                                 </div>
                             </div>
-                            <button type="button" class="btn-add" onclick="addShareholder()">+ Add Shareholder (添加股东)</button>
                         </div>
 
                         <!-- 董事信息 -->
                         <div class="form-section optional-section">
                             <h3>👤 Director Information (董事信息) <span class="optional-badge">Optional (可选)</span></h3>
-                            <p class="section-note">💡 The following information is optional, only for more accurate estimation (以下信息可不填写，仅用于获取更准确的评估结果)</p>
-                            <div id="directorsContainer">
-                                <div class="director-item" data-index="0">
-                                    <div class="item-header">
-                                        <h4>Director (董事) #1</h4>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Name (姓名)</label>
-                                            <input type="text" name="directorName[]" placeholder="Full Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Nationality (国籍)</label>
-                                            <input type="text" name="directorNationality[]" placeholder="China">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Address (地址)</label>
-                                        <input type="text" name="directorAddress[]" placeholder="Complete Address">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Contact Information (联系方式)</label>
-                                        <input type="email" name="directorEmail[]" placeholder="Email">
-                                    </div>
+                            <p class="section-note">💡 Only for timeline estimation, not required (仅用于时效评估，非必填)</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Number of Directors (董事人数)</label>
+                                    <input type="number" id="directorCount" name="directorCount" min="1" max="20" placeholder="e.g.: 1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nationality/Location (国籍/所在地)</label>
+                                    <select id="directorNationality" name="directorNationality">
+                                        <option value="">Please select (请选择)</option>
+                                        <option value="CN">🇨🇳 China (中国)</option>
+                                        <option value="HK">🇭🇰 Hong Kong (香港)</option>
+                                        <option value="US">🇺🇸 United States (美国)</option>
+                                        <option value="UK">🇬🇧 United Kingdom (英国)</option>
+                                        <option value="SG">🇸🇬 Singapore (新加坡)</option>
+                                        <option value="JP">🇯🇵 Japan (日本)</option>
+                                        <option value="KR">🇰🇷 Korea (韩国)</option>
+                                        <option value="Other">🌍 Other (其他)</option>
+                                    </select>
                                 </div>
                             </div>
-                            <button type="button" class="btn-add" onclick="addDirector()">+ Add Director (添加董事)</button>
                         </div>
 
                         <!-- 注册地址 -->
@@ -273,19 +237,26 @@
                         <!-- 文件邮寄信息 -->
                         <div class="form-section">
                             <h3>📮 Document Delivery Information (文件邮寄信息)</h3>
-                            <div class="form-group">
-                                <label for="deliveryCountry">Delivery Country (收件国家) <span class="required">*</span></label>
-                                <select id="deliveryCountry" name="deliveryCountry" required>
-                                    <option value="CN">China (中国)</option>
-                                    <option value="HK">Hong Kong (香港)</option>
-                                    <option value="SG">Singapore (新加坡)</option>
-                                    <option value="US">United States (美国)</option>
-                                    <option value="UK">United Kingdom (英国)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="deliveryAddress">Detailed Address (详细地址) <span class="required">*</span></label>
-                                <textarea id="deliveryAddress" name="deliveryAddress" rows="3" placeholder="Complete delivery address (完整的收件地址)" required></textarea>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="deliveryCountry">Delivery Country (收件国家) <span class="required">*</span></label>
+                                    <select id="deliveryCountry" name="deliveryCountry" required>
+                                        <option value="CN">🇨🇳 China (中国)</option>
+                                        <option value="HK">🇭🇰 Hong Kong (香港)</option>
+                                        <option value="SG">🇸🇬 Singapore (新加坡)</option>
+                                        <option value="US">🇺🇸 United States (美国)</option>
+                                        <option value="UK">🇬🇧 United Kingdom (英国)</option>
+                                        <option value="JP">🇯🇵 Japan (日本)</option>
+                                        <option value="AU">🇦🇺 Australia (澳大利亚)</option>
+                                        <option value="CA">🇨🇦 Canada (加拿大)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="deliveryCity">City (城市) <span class="required">*</span></label>
+                                    <select id="deliveryCity" name="deliveryCity" required>
+                                        <option value="">Please select country first (请先选择国家)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
