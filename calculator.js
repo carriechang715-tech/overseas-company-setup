@@ -55,14 +55,22 @@ function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData
     
     // 跨国股东/董事额外增加时间（需要海外公证）
     if (formData.shareholders && formData.shareholders.length > 0) {
-        const shareholderNationality = formData.shareholders[0].nationality;
-        if (shareholderNationality && shareholderNationality !== jurisdiction && shareholderNationality !== 'Unknown') {
+        const shareholderNationalities = formData.shareholders[0].nationalities || [];
+        // 检查是否有跨国股东
+        const hasForeignShareholder = shareholderNationalities.some(nat => 
+            nat && nat !== jurisdiction && nat !== 'Unknown'
+        );
+        if (hasForeignShareholder) {
             documentPrepMultiplier += 0.2; // 海外股东增加20%时间
         }
     }
     if (formData.directors && formData.directors.length > 0) {
-        const directorNationality = formData.directors[0].nationality;
-        if (directorNationality && directorNationality !== jurisdiction && directorNationality !== 'Unknown') {
+        const directorNationalities = formData.directors[0].nationalities || [];
+        // 检查是否有跨国董事
+        const hasForeignDirector = directorNationalities.some(nat => 
+            nat && nat !== jurisdiction && nat !== 'Unknown'
+        );
+        if (hasForeignDirector) {
             documentPrepMultiplier += 0.15; // 海外董事增加15%时间
         }
     }
@@ -184,6 +192,11 @@ function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData
     
     totalWorkingDays = currentDay;
     
+    // 确保总时间至少为1天（避免显示0天）
+    if (totalWorkingDays === 0) {
+        totalWorkingDays = 1;
+    }
+    
     // 添加额外服务相关的流程阶段
     if (formData.services && Array.isArray(formData.services)) {
         const services = formData.services.map(s => typeof s === 'string' ? s : s.type);
@@ -291,15 +304,15 @@ function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData
     };
 }
 
-// 调用快递评估工具
+// 调用快递评估工具（确保使用express-tool的计算逻辑）
 function calculateExpressDelivery(fromCountry, toCountry, weight) {
     try {
-        // 调用之前创建的快递评估工具
+        // 调用express-tool的calculateExpressOptions函数
         if (typeof calculateExpressOptions === 'function') {
             const result = calculateExpressOptions({
                 fromCountry,
                 toCountry,
-                weight,
+                weight: weight || 0.5,  // 默认0.5kg
                 urgent: false,
                 parcelType: 'document',
                 serviceType: 'standard'
@@ -310,19 +323,36 @@ function calculateExpressDelivery(fromCountry, toCountry, weight) {
                 const timeStr = result.recommended.time;
                 const days = parseExpressTime(timeStr);
                 
+                // 确保至少返回1天
+                const finalDays = Math.max(days, 1);
+                
+                console.log(`快递计算: ${fromCountry} -> ${toCountry}, 时间: ${timeStr}, 解析天数: ${finalDays}天`);
+                
                 return {
-                    days,
+                    days: finalDays,
                     price: result.recommended.price,
                     company: result.recommended.name,
                     time: timeStr
                 };
             }
         }
+        
+        // 如果函数不存在，记录警告
+        console.warn('calculateExpressOptions 函数不可用，使用默认估算');
     } catch (e) {
-        console.warn('快递计算失败，使用默认估算', e);
+        console.error('快递计算失败:', e);
     }
     
-    return null;
+    // 如果API调用失败，使用默认估算
+    const defaultDays = estimateDefaultExpressTime(fromCountry, toCountry);
+    console.log(`使用默认快递时间: ${fromCountry} -> ${toCountry} = ${defaultDays}天`);
+    
+    return {
+        days: defaultDays,
+        price: 0,
+        company: 'Estimated (预估)',
+        time: `${defaultDays}天`
+    };
 }
 
 // 解析快递时间字符串
@@ -337,7 +367,7 @@ function parseExpressTime(timeStr) {
     if (match) {
         const min = parseInt(match[1]);
         const max = parseInt(match[2]);
-        return (min + max) / 2;
+        return Math.ceil((min + max) / 2);  // 取平均值并向上取整
     }
     
     const singleMatch = timeStr.match(/(\d+)天/);
@@ -345,21 +375,27 @@ function parseExpressTime(timeStr) {
         return parseInt(singleMatch[1]);
     }
     
-    return 5;  // 默认5天
+    // 默认至少返回1天
+    return 1;
 }
 
 // 默认快递时间估算（如果快递API不可用）
 function estimateDefaultExpressTime(fromCountry, toCountry) {
     const expressTimeMatrix = {
-        'HK': { 'CN': 2, 'US': 5, 'UK': 6, 'SG': 3, 'AU': 5 },
-        'SG': { 'CN': 3, 'US': 6, 'UK': 7, 'HK': 3, 'AU': 4 },
-        'US': { 'CN': 7, 'HK': 5, 'SG': 6, 'UK': 4, 'AU': 6 },
-        'UK': { 'CN': 8, 'HK': 6, 'SG': 7, 'US': 4, 'AU': 7 },
-        'BVI': { 'CN': 10, 'HK': 8, 'SG': 9, 'US': 7, 'UK': 8 },
-        'Cayman': { 'CN': 10, 'HK': 8, 'SG': 9, 'US': 7, 'UK': 8 }
+        'HK': { 'CN': 4, 'US': 7, 'UK': 8, 'SG': 3, 'AU': 5, 'JP': 3, 'CA': 8 },
+        'SG': { 'CN': 5, 'US': 8, 'UK': 9, 'HK': 3, 'AU': 4, 'JP': 4, 'CA': 9 },
+        'US': { 'CN': 8, 'HK': 7, 'SG': 8, 'UK': 6, 'AU': 6, 'JP': 5, 'CA': 3 },
+        'UK': { 'CN': 9, 'HK': 8, 'SG': 9, 'US': 6, 'AU': 7, 'JP': 8, 'CA': 7 },
+        'CN': { 'HK': 4, 'SG': 5, 'US': 8, 'UK': 9, 'AU': 6, 'JP': 4, 'CA': 9 },
+        'JP': { 'CN': 4, 'HK': 3, 'SG': 4, 'US': 5, 'UK': 8, 'AU': 5, 'CA': 6 },
+        'AU': { 'CN': 6, 'HK': 5, 'SG': 4, 'US': 6, 'UK': 7, 'JP': 5, 'CA': 7 },
+        'CA': { 'CN': 9, 'HK': 8, 'SG': 9, 'US': 3, 'UK': 7, 'JP': 6, 'AU': 7 },
+        'BVI': { 'CN': 10, 'HK': 8, 'SG': 9, 'US': 7, 'UK': 8, 'AU': 9, 'JP': 9, 'CA': 8 },
+        'Cayman': { 'CN': 10, 'HK': 8, 'SG': 9, 'US': 7, 'UK': 8, 'AU': 9, 'JP': 9, 'CA': 8 }
     };
     
-    return expressTimeMatrix[fromCountry]?.[toCountry] || 7;
+    // 确保至少返回1天
+    return Math.max(expressTimeMatrix[fromCountry]?.[toCountry] || 7, 1);
 }
 
 // 计算自然日（考虑周末和节假日）

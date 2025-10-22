@@ -33,6 +33,50 @@ function initializeForm() {
     handleDeliveryCountryChange('CN');
 }
 
+// 处理股东人数变化
+function handleShareholderCountChange() {
+    const count = parseInt(document.getElementById('shareholderCount')?.value || 0);
+    const singleSelect = document.getElementById('shareholderNationality');
+    const multipleContainer = document.getElementById('shareholderNationalityMultiple');
+    const label = document.getElementById('shareholderNationalityLabel');
+    
+    if (count > 2) {
+        // 显示多选
+        singleSelect.style.display = 'none';
+        multipleContainer.style.display = 'block';
+        label.innerHTML = 'Nationalities/Locations (国籍/所在地) <span style="color: #0ea5e9; font-size: 12px;">- Multiple Selection (多选)</span>';
+    } else {
+        // 显示单选
+        singleSelect.style.display = 'block';
+        multipleContainer.style.display = 'none';
+        label.innerHTML = 'Nationality/Location (国籍/所在地)';
+        // 清空多选
+        document.querySelectorAll('[name="shareholderNationalities[]"]').forEach(cb => cb.checked = false);
+    }
+}
+
+// 处理董事人数变化
+function handleDirectorCountChange() {
+    const count = parseInt(document.getElementById('directorCount')?.value || 0);
+    const singleSelect = document.getElementById('directorNationality');
+    const multipleContainer = document.getElementById('directorNationalityMultiple');
+    const label = document.getElementById('directorNationalityLabel');
+    
+    if (count > 2) {
+        // 显示多选
+        singleSelect.style.display = 'none';
+        multipleContainer.style.display = 'block';
+        label.innerHTML = 'Nationalities/Locations (国籍/所在地) <span style="color: #0ea5e9; font-size: 12px;">- Multiple Selection (多选)</span>';
+    } else {
+        // 显示单选
+        singleSelect.style.display = 'block';
+        multipleContainer.style.display = 'none';
+        label.innerHTML = 'Nationality/Location (国籍/所在地)';
+        // 清空多选
+        document.querySelectorAll('[name="directorNationalities[]"]').forEach(cb => cb.checked = false);
+    }
+}
+
 // 处理收件国家变化
 function handleDeliveryCountryChange(countryCode) {
     const deliveryCitySelect = document.getElementById('deliveryCity');
@@ -284,32 +328,64 @@ function handleFormSubmit() {
 // 收集股东信息（简化版）
 function collectShareholders() {
     const count = document.getElementById('shareholderCount')?.value;
-    const nationality = document.getElementById('shareholderNationality')?.value;
     
     if (!count || count === '' || count === '0') {
         return [];
     }
     
+    const countNum = parseInt(count);
+    let nationalities = [];
+    
+    if (countNum > 2) {
+        // 多选国籍
+        document.querySelectorAll('[name="shareholderNationalities[]"]:checked').forEach(cb => {
+            nationalities.push(cb.value);
+        });
+        if (nationalities.length === 0) {
+            nationalities = ['Unknown'];
+        }
+    } else {
+        // 单选国籍
+        const nationality = document.getElementById('shareholderNationality')?.value;
+        nationalities = [nationality || 'Unknown'];
+    }
+    
     // 返回简化的股东信息
     return [{
-        count: parseInt(count),
-        nationality: nationality || 'Unknown'
+        count: countNum,
+        nationalities: nationalities
     }];
 }
 
 // 收集董事信息（简化版）
 function collectDirectors() {
     const count = document.getElementById('directorCount')?.value;
-    const nationality = document.getElementById('directorNationality')?.value;
     
     if (!count || count === '' || count === '0') {
         return [];
     }
     
+    const countNum = parseInt(count);
+    let nationalities = [];
+    
+    if (countNum > 2) {
+        // 多选国籍
+        document.querySelectorAll('[name="directorNationalities[]"]:checked').forEach(cb => {
+            nationalities.push(cb.value);
+        });
+        if (nationalities.length === 0) {
+            nationalities = ['Unknown'];
+        }
+    } else {
+        // 单选国籍
+        const nationality = document.getElementById('directorNationality')?.value;
+        nationalities = [nationality || 'Unknown'];
+    }
+    
     // 返回简化的董事信息
     return [{
-        count: parseInt(count),
-        nationality: nationality || 'Unknown'
+        count: countNum,
+        nationalities: nationalities
     }];
 }
 
@@ -453,8 +529,8 @@ function showTimeline() {
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 14px;">
                     ${formData.companyName ? `<div><strong>Company Name (公司名称):</strong> ${formData.companyName}</div>` : ''}
                     ${formData.companyType ? `<div><strong>Company Type (公司类型):</strong> ${formData.companyType}</div>` : ''}
-                    ${formData.shareholders && formData.shareholders.length > 0 && formData.shareholders[0].count ? `<div><strong>Shareholders (股东):</strong> ${formData.shareholders[0].count} person(s) (位)${formData.shareholders[0].nationality !== 'Unknown' ? ` - ${formData.shareholders[0].nationality}` : ''}</div>` : '<div><strong>Shareholders (股东):</strong> Not specified (未填写)</div>'}
-                    ${formData.directors && formData.directors.length > 0 && formData.directors[0].count ? `<div><strong>Directors (董事):</strong> ${formData.directors[0].count} person(s) (位)${formData.directors[0].nationality !== 'Unknown' ? ` - ${formData.directors[0].nationality}` : ''}</div>` : '<div><strong>Directors (董事):</strong> Not specified (未填写)</div>'}
+                    ${formData.shareholders && formData.shareholders.length > 0 && formData.shareholders[0].count ? `<div><strong>Shareholders (股东):</strong> ${formData.shareholders[0].count} person(s) (位)${formData.shareholders[0].nationalities && formData.shareholders[0].nationalities.length > 0 && formData.shareholders[0].nationalities[0] !== 'Unknown' ? ` - ${formData.shareholders[0].nationalities.join(', ')}` : ''}</div>` : '<div><strong>Shareholders (股东):</strong> Not specified (未填写)</div>'}
+                    ${formData.directors && formData.directors.length > 0 && formData.directors[0].count ? `<div><strong>Directors (董事):</strong> ${formData.directors[0].count} person(s) (位)${formData.directors[0].nationalities && formData.directors[0].nationalities.length > 0 && formData.directors[0].nationalities[0] !== 'Unknown' ? ` - ${formData.directors[0].nationalities.join(', ')}` : ''}</div>` : '<div><strong>Directors (董事):</strong> Not specified (未填写)</div>'}
                     ${formData.services && formData.services.length > 0 ? `<div><strong>Additional Services (额外服务):</strong> ${formData.services.length} service(s) (项)</div>` : '<div><strong>Additional Services (额外服务):</strong> None (无)</div>'}
                     ${formData.deliveryCountry ? `<div><strong>Delivery to (邮寄到):</strong> ${formData.deliveryCity ? formData.deliveryCity + ', ' : ''}${formData.deliveryCountry}</div>` : ''}
                 </div>
