@@ -62,16 +62,17 @@ body {
     color: var(--text-primary);
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    padding: var(--spacing-lg);
+    padding: 0;
+    margin: 0;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     background: var(--bg-primary);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-xl);
-    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ==========================================
@@ -82,6 +83,10 @@ body {
     color: white;
     padding: var(--spacing-2xl) var(--spacing-xl);
     text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .app-header h1 {
@@ -119,6 +124,8 @@ body {
    ========================================== */
 .app-main {
     padding: var(--spacing-2xl) var(--spacing-xl);
+    flex: 1;
+    overflow-y: auto;
 }
 
 /* ==========================================
@@ -128,7 +135,15 @@ body {
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--spacing-2xl);
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    background: var(--bg-primary);
+    padding: var(--spacing-lg) 0;
+    margin: 0 calc(-1 * var(--spacing-xl)) var(--spacing-2xl);
+    padding-left: var(--spacing-xl);
+    padding-right: var(--spacing-xl);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .step-indicator::before {

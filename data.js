@@ -80,7 +80,14 @@ const JURISDICTIONS = {
         minCapital: 'KRW 100',
         description: '高科技产业发达，韩流文化影响力大',
         advantages: ['创新能力强', '电子商务发达', '文化产业', 'FTA覆盖广'],
-        avgSetupDays: 10
+        avgSetupDays: 10,
+        hasSubRegions: true,
+        subRegions: {
+            'SEOUL': { name: '首尔 (Seoul)', days: 10, popular: true, description: '首都，经济中心' },
+            'BUSAN': { name: '釜山 (Busan)', days: 10, popular: true, description: '第二大城市，港口中心' },
+            'INCHEON': { name: '仁川 (Incheon)', days: 10, popular: false, description: '自贸区，国际机场' },
+            'DAEGU': { name: '大邱 (Daegu)', days: 10, popular: false, description: '纺织产业，制造业' }
+        }
     },
     'MY': {
         name: '马来西亚',
@@ -90,12 +97,19 @@ const JURISDICTIONS = {
         language: ['马来文', '英文', '中文'],
         timezone: 'GMT+8',
         workingDays: 5,
-        holidays: ['新年', '春节', '劳动节', '卫塞节', '国庆日', '哈芝节', '屠妖节', '圣诞节'],
+        holidays: ['新年', '春节', '劳动节', '卫塞节', '国庆日', '哈芝节', '屠妦节', '圣诞节'],
         taxRate: '24%',
         minCapital: 'MYR 1',
         description: '东南亚新兴市场，华人众多',
         advantages: ['成本较低', '语言便利', '地理位置好', '政策优惠'],
-        avgSetupDays: 12
+        avgSetupDays: 12,
+        hasSubRegions: true,
+        subRegions: {
+            'KL': { name: '吉隆坡 (Kuala Lumpur)', days: 12, popular: true, description: '首都，金融中心' },
+            'JB': { name: '新山 (Johor Bahru)', days: 12, popular: true, description: '邻近新加坡，制造业' },
+            'PG': { name: '槟城 (Penang)', days: 12, popular: true, description: '电子产业中心' },
+            'LABUAN': { name: '纳闽 (Labuan)', days: 12, popular: false, description: '离岸金融中心，低税' }
+        }
     },
     'TH': {
         name: '泰国',
@@ -110,7 +124,14 @@ const JURISDICTIONS = {
         minCapital: 'THB 1,000,000',
         description: '东南亚制造业中心，旅游业发达',
         advantages: ['劳动力成本低', '旅游市场大', '制造业基础好', 'BOI优惠政策'],
-        avgSetupDays: 15
+        avgSetupDays: 15,
+        hasSubRegions: true,
+        subRegions: {
+            'BKK': { name: '曼谷 (Bangkok)', days: 15, popular: true, description: '首都，经济中心' },
+            'CNX': { name: '清迈 (Chiang Mai)', days: 15, popular: true, description: '北部中心，数字游民' },
+            'PHUKET': { name: '普吉 (Phuket)', days: 15, popular: false, description: '旅游业中心' },
+            'SRIRACHA': { name: '春武里 (Sriracha)', days: 15, popular: false, description: '制造业中心，工业区' }
+        }
     },
     'VN': {
         name: '越南',
@@ -125,7 +146,14 @@ const JURISDICTIONS = {
         minCapital: 'VND 1',
         description: '东南亚新兴制造基地，经济增长快',
         advantages: ['人口红利', '制造业转移', '成本优势', '政策开放'],
-        avgSetupDays: 18
+        avgSetupDays: 18,
+        hasSubRegions: true,
+        subRegions: {
+            'HCM': { name: '胡志明市 (Ho Chi Minh)', days: 18, popular: true, description: '经济中心，最大城市' },
+            'HN': { name: '河内 (Hanoi)', days: 18, popular: true, description: '首都，政治中心' },
+            'DN': { name: '岐港 (Da Nang)', days: 18, popular: false, description: '中部中心，港口城市' },
+            'BINH': { name: '平阳 (Binh Duong)', days: 18, popular: false, description: '工业区，制造业' }
+        }
     },
     'IN': {
         name: '印度',
@@ -135,12 +163,19 @@ const JURISDICTIONS = {
         language: ['印地文', '英文'],
         timezone: 'GMT+5:30',
         workingDays: 6,
-        holidays: ['共和国日', '独立日', '甘地诞辰', '排灯节', '洒红节', '开斋节'],
+        holidays: ['共和国日', '独立日', '甝地诞辰', '排灯节', '洒红节', '开斋节'],
         taxRate: '25%-30%',
         minCapital: 'INR 1',
         description: '全球第五大经济体，人口市场巨大',
         advantages: ['市场潜力大', 'IT产业发达', '人力资源丰富', '英语普及'],
-        avgSetupDays: 20
+        avgSetupDays: 20,
+        hasSubRegions: true,
+        subRegions: {
+            'MUM': { name: '孟买 (Mumbai)', days: 20, popular: true, description: '金融中心，最大城市' },
+            'BLR': { name: '班加罗尔 (Bangalore)', days: 20, popular: true, description: 'IT中心，印度硅谷' },
+            'DEL': { name: '德里 (Delhi)', days: 20, popular: true, description: '首都，政治中心' },
+            'HYD': { name: '海得拉巴 (Hyderabad)', days: 20, popular: false, description: 'IT产业，制药中心' }
+        }
     },
     'ID': {
         name: '印度尼西亚',
@@ -155,7 +190,14 @@ const JURISDICTIONS = {
         minCapital: 'IDR 1',
         description: '东南亚最大经济体，人口第四',
         advantages: ['人口众多', '资源丰富', '市场潜力', '战略位置'],
-        avgSetupDays: 21
+        avgSetupDays: 21,
+        hasSubRegions: true,
+        subRegions: {
+            'JKT': { name: '雅加达 (Jakarta)', days: 21, popular: true, description: '首都，经济中心' },
+            'SBY': { name: '泗水 (Surabaya)', days: 21, popular: true, description: '第二大城市，工业中心' },
+            'BDG': { name: '万隆 (Bandung)', days: 21, popular: false, description: '科技产业，创业中心' },
+            'BATAM': { name: '巴淡 (Batam)', days: 21, popular: false, description: '自贸区，邻近新加坡' }
+        }
     },
     'PH': {
         name: '菲律宾',
@@ -165,12 +207,19 @@ const JURISDICTIONS = {
         language: ['菲律宾文', '英文'],
         timezone: 'GMT+8',
         workingDays: 5,
-        holidays: ['新年', '人民力量革命纪念日', '耶稣受难日', '劳动节', '独立日', '国庆日', '万圣节', '圣诞节'],
+        holidays: ['新年', '人民力量革命纪念日', '耶穣受难日', '劳动节', '独立日', '国庆日', '万圣节', '圣诞节'],
         taxRate: '25%-30%',
         minCapital: 'PHP 1',
         description: '英语国家，BPO产业发达',
         advantages: ['英语熟练', '劳动力充足', '成本低', '美国关系'],
-        avgSetupDays: 16
+        avgSetupDays: 16,
+        hasSubRegions: true,
+        subRegions: {
+            'MNL': { name: '马尼拉 (Manila)', days: 16, popular: true, description: '首都，经济中心' },
+            'CEBU': { name: '宿务 (Cebu)', days: 16, popular: true, description: 'BPO中心，旅游业' },
+            'CLARK': { name: '克拉克 (Clark)', days: 16, popular: false, description: '经济特区，自贸区' },
+            'DAVAO': { name: '达沃 (Davao)', days: 16, popular: false, description: '南部中心，农业' }
+        }
     },
     'TW': {
         name: '中国台湾',
@@ -185,7 +234,14 @@ const JURISDICTIONS = {
         minCapital: 'TWD 1',
         description: '高科技产业发达，半导体全球领先',
         advantages: ['科技优势', '制造业强', '地理位置', '文化相近'],
-        avgSetupDays: 10
+        avgSetupDays: 10,
+        hasSubRegions: true,
+        subRegions: {
+            'TPE': { name: '台北 (Taipei)', days: 10, popular: true, description: '首都，金融中心' },
+            'HSC': { name: '新竹 (Hsinchu)', days: 10, popular: true, description: '科学园区，半导体' },
+            'TXG': { name: '台中 (Taichung)', days: 10, popular: false, description: '中部中心，制造业' },
+            'KHH': { name: '高雄 (Kaohsiung)', days: 10, popular: false, description: '南部中心，港口城市' }
+        }
     },
     'AE': {
         name: '阿联酋',
@@ -200,7 +256,14 @@ const JURISDICTIONS = {
         minCapital: 'AED 1,000',
         description: '中东金融和贸易中心，迪拜自贸区',
         advantages: ['零税收（自贸区）', '战略位置', '基础设施好', '国际化程度高'],
-        avgSetupDays: 8
+        avgSetupDays: 8,
+        hasSubRegions: true,
+        subRegions: {
+            'DXB': { name: '迪拜 (Dubai)', days: 8, popular: true, description: '金融中心，自贸区' },
+            'AUH': { name: '阿布扎比 (Abu Dhabi)', days: 8, popular: true, description: '首都，能源中心' },
+            'SHJ': { name: '沙迦 (Sharjah)', days: 8, popular: false, description: '制造业，成本低' },
+            'RAK': { name: '哈伊马角 (Ras Al Khaimah)', days: 8, popular: false, description: '离岸区，低成本' }
+        }
     },
 
     // ========== 欧洲地区 ==========
@@ -234,12 +297,19 @@ const JURISDICTIONS = {
         language: ['德文'],
         timezone: 'GMT+1',
         workingDays: 5,
-        holidays: ['新年', '耶稣受难日', '复活节', '劳动节', '耶稣升天日', '圣灵降临节', '德国统一日', '圣诞节'],
+        holidays: ['新年', '耶穣受难日', '复活节', '劳动节', '耶穣升天日', '圣灵降临节', '德国统一日', '圣诞节'],
         taxRate: '15%-30%',
         minCapital: 'EUR 25,000',
         description: '欧洲经济引擎，工业强国',
         advantages: ['欧盟市场', '工业发达', '技术先进', '信誉度高'],
-        avgSetupDays: 14
+        avgSetupDays: 14,
+        hasSubRegions: true,
+        subRegions: {
+            'BER': { name: '柏林 (Berlin)', days: 14, popular: true, description: '首都，创业中心' },
+            'FRA': { name: '法兰克福 (Frankfurt)', days: 14, popular: true, description: '金融中心，ECB所在地' },
+            'MUC': { name: '慕尼黑 (Munich)', days: 14, popular: true, description: '科技中心，生活质量高' },
+            'HAM': { name: '汉堡 (Hamburg)', days: 14, popular: false, description: '港口城市，物流中心' }
+        }
     },
     'FR': {
         name: '法国',
@@ -249,12 +319,19 @@ const JURISDICTIONS = {
         language: ['法文'],
         timezone: 'GMT+1',
         workingDays: 5,
-        holidays: ['新年', '复活节', '劳动节', '二战胜利日', '耶稣升天日', '国庆日', '圣母升天日', '万圣节', '一战停战日', '圣诞节'],
+        holidays: ['新年', '复活节', '劳动节', '二战胜利日', '耶穣升天日', '国庆日', '圣母升天日', '万圣节', '一战停战日', '圣诞节'],
         taxRate: '25%-31%',
         minCapital: 'EUR 1',
         description: '欧洲第二大经济体，奢侈品之都',
         advantages: ['欧盟核心', '消费市场大', '品牌影响力', '创新能力'],
-        avgSetupDays: 12
+        avgSetupDays: 12,
+        hasSubRegions: true,
+        subRegions: {
+            'PAR': { name: '巴黎 (Paris)', days: 12, popular: true, description: '首都，时尚之都' },
+            'LYO': { name: '里昂 (Lyon)', days: 12, popular: false, description: '第二大城市，美食之都' },
+            'MAR': { name: '马赛 (Marseille)', days: 12, popular: false, description: '港口城市，地中海门户' },
+            'NCE': { name: '尼斯 (Nice)', days: 12, popular: false, description: '旅游业，科技园区' }
+        }
     },
     'IE': {
         name: '爱尔兰',
@@ -264,12 +341,18 @@ const JURISDICTIONS = {
         language: ['英文', '爱尔兰文'],
         timezone: 'GMT+0',
         workingDays: 5,
-        holidays: ['新年', '圣帕特里克节', '耶稣受难日', '复活节', '五月银行假日', '六月银行假日', '八月银行假日', '十月银行假日', '圣诞节', '节礼日'],
+        holidays: ['新年', '圣帕特里克节', '耶穣受难日', '复活节', '五月银行假日', '六月银行假日', '八月银行假日', '十月银行假日', '圣诞节', '节礼日'],
         taxRate: '12.5%',
         minCapital: 'EUR 1',
         description: '欧洲低税天堂，科技公司首选',
         advantages: ['低税率', '欧盟成员', '英语国家', '科技友好'],
-        avgSetupDays: 8
+        avgSetupDays: 8,
+        hasSubRegions: true,
+        subRegions: {
+            'DUB': { name: '都柏林 (Dublin)', days: 8, popular: true, description: '首都，科技中心' },
+            'CORK': { name: '科克 (Cork)', days: 8, popular: false, description: '第二大城市，医药中心' },
+            'GAL': { name: '高威 (Galway)', days: 8, popular: false, description: '西部中心，创业友好' }
+        }
     },
     'NL': {
         name: '荷兰',
@@ -279,12 +362,18 @@ const JURISDICTIONS = {
         language: ['荷兰文', '英文'],
         timezone: 'GMT+1',
         workingDays: 5,
-        holidays: ['新年', '耶稣受难日', '复活节', '国王节', '解放日', '耶稣升天日', '圣灵降临节', '圣诞节', '节礼日'],
+        holidays: ['新年', '耶穣受难日', '复活节', '国王节', '解放日', '耶穣升天日', '圣灵降临节', '圣诞节', '节礼日'],
         taxRate: '15%-25.8%',
         minCapital: 'EUR 0.01',
         description: '欧洲门户，物流中心',
         advantages: ['地理位置优', '物流发达', '税务优惠', '英语普及'],
-        avgSetupDays: 10
+        avgSetupDays: 10,
+        hasSubRegions: true,
+        subRegions: {
+            'AMS': { name: '阿姆斯特丹 (Amsterdam)', days: 10, popular: true, description: '首都，金融中心' },
+            'RTM': { name: '鹿特丹 (Rotterdam)', days: 10, popular: true, description: '欧洲最大港口' },
+            'EIN': { name: '埃因霍温 (Eindhoven)', days: 10, popular: false, description: '科技中心，设计之都' }
+        }
     },
     'CH': {
         name: '瑞士',
@@ -294,12 +383,19 @@ const JURISDICTIONS = {
         language: ['德文', '法文', '意大利文', '罗曼什文'],
         timezone: 'GMT+1',
         workingDays: 5,
-        holidays: ['新年', '耶稣受难日', '复活节', '耶稣升天日', '圣灵降临节', '国庆日', '圣诞节'],
+        holidays: ['新年', '耶穣受难日', '复活节', '耶穣升天日', '圣灵降临节', '国庆日', '圣诞节'],
         taxRate: '8.5%-21%',
         minCapital: 'CHF 100,000',
         description: '全球金融中心，隐私保护严格',
         advantages: ['政治稳定', '银行保密', '低税率', '生活质量高'],
-        avgSetupDays: 15
+        avgSetupDays: 15,
+        hasSubRegions: true,
+        subRegions: {
+            'ZRH': { name: '苏黎世 (Zurich)', days: 15, popular: true, description: '金融中心，最大城市' },
+            'GVA': { name: '日内瓦 (Geneva)', days: 15, popular: true, description: '国际组织中心' },
+            'BAS': { name: '巴塞尔 (Basel)', days: 15, popular: false, description: '制药中心' },
+            'ZUG': { name: '楚格 (Zug)', days: 15, popular: false, description: '低税州，加密货币' }
+        }
     },
     'LU': {
         name: '卢森堡',
@@ -359,7 +455,14 @@ const JURISDICTIONS = {
         minCapital: 'EUR 10,000',
         description: '欧洲第三大经济体，奢侈品产业',
         advantages: ['欧盟市场', '制造业强', '品牌效应', '文化影响'],
-        avgSetupDays: 16
+        avgSetupDays: 16,
+        hasSubRegions: true,
+        subRegions: {
+            'ROM': { name: '罗马 (Rome)', days: 16, popular: true, description: '首都，文化之都' },
+            'MIL': { name: '米兰 (Milan)', days: 16, popular: true, description: '时尚之都，金融中心' },
+            'FLO': { name: '佛罗伦萨 (Florence)', days: 16, popular: false, description: '艺术之都，手工业' },
+            'TUR': { name: '都灵 (Turin)', days: 16, popular: false, description: '工业中心，汽车产业' }
+        }
     },
     'ES': {
         name: '西班牙',
@@ -369,12 +472,19 @@ const JURISDICTIONS = {
         language: ['西班牙文'],
         timezone: 'GMT+1',
         workingDays: 5,
-        holidays: ['新年', '主显节', '耶稣受难日', '劳动节', '圣母升天日', '国庆日', '万圣节', '宪法日', '圣母无染原罪日', '圣诞节'],
+        holidays: ['新年', '主显节', '耶穣受难日', '劳动节', '圣母升天日', '国庆日', '万圣节', '宪法日', '圣母无染原罪日', '圣诞节'],
         taxRate: '25%',
         minCapital: 'EUR 3,000',
         description: '欧洲第四大经济体，拉美门户',
         advantages: ['欧盟市场', '拉美联系', '旅游业发达', '语言优势'],
-        avgSetupDays: 14
+        avgSetupDays: 14,
+        hasSubRegions: true,
+        subRegions: {
+            'MAD': { name: '马德里 (Madrid)', days: 14, popular: true, description: '首都，经济中心' },
+            'BCN': { name: '巴塞罗那 (Barcelona)', days: 14, popular: true, description: '科技中心，创业友好' },
+            'VAL': { name: '瓦伦西亚 (Valencia)', days: 14, popular: false, description: '港口城市，制造业' },
+            'SEV': { name: '塞维利亚 (Seville)', days: 14, popular: false, description: '文化中心，旅游业' }
+        }
     },
 
     // ========== 美洲地区 ==========
@@ -441,7 +551,14 @@ const JURISDICTIONS = {
         minCapital: 'MXN 3,000',
         description: '拉美第二大经济体，美国门户',
         advantages: ['USMCA成员', '制造业发达', '人口市场大', '成本优势'],
-        avgSetupDays: 15
+        avgSetupDays: 15,
+        hasSubRegions: true,
+        subRegions: {
+            'MEX': { name: '墨西哥城 (Mexico City)', days: 15, popular: true, description: '首都，经济中心' },
+            'GDL': { name: '瓜达拉哈拉 (Guadalajara)', days: 15, popular: true, description: '科技中心，IT产业' },
+            'MTY': { name: '蒙特雷 (Monterrey)', days: 15, popular: true, description: '工业中心，制造业' },
+            'TIJ': { name: '蒂华纳 (Tijuana)', days: 15, popular: false, description: '边境城市，制造业' }
+        }
     },
     'BR': {
         name: '巴西',
@@ -451,12 +568,19 @@ const JURISDICTIONS = {
         language: ['葡萄牙文'],
         timezone: 'GMT-2至GMT-5',
         workingDays: 5,
-        holidays: ['新年', '狂欢节', '耶稣受难日', '复活节', '劳动节', '独立日', '圣母显灵日', '万灵节', '共和国日', '黑人意识日', '圣诞节'],
+        holidays: ['新年', '狂欢节', '耶穣受难日', '复活节', '劳动节', '独立日', '圣母显灵日', '万灵节', '共和国日', '黑人意识日', '圣诞节'],
         taxRate: '15%-34%',
         minCapital: 'BRL 1',
         description: '拉美最大经济体，资源大国',
         advantages: ['市场潜力大', '资源丰富', '金砖国家', '区域影响力'],
-        avgSetupDays: 25
+        avgSetupDays: 25,
+        hasSubRegions: true,
+        subRegions: {
+            'SAO': { name: '圣保罗 (Sao Paulo)', days: 25, popular: true, description: '经济中心，最大城市' },
+            'RIO': { name: '里约 (Rio de Janeiro)', days: 25, popular: true, description: '文化中心，旅游业' },
+            'BRA': { name: '巴西利亚 (Brasilia)', days: 25, popular: false, description: '首都，政治中心' },
+            'MAN': { name: '玛瑙斯 (Manaus)', days: 25, popular: false, description: '自贸区，制造业' }
+        }
     },
     'CL': {
         name: '智利',
@@ -466,12 +590,18 @@ const JURISDICTIONS = {
         language: ['西班牙文'],
         timezone: 'GMT-3至GMT-6',
         workingDays: 5,
-        holidays: ['新年', '耶稣受难日', '复活节', '劳动节', '海军节', '圣伯多禄圣保禄节', '圣母升天日', '独立日', '军队日', '哥伦布日', '宗教改革日', '万圣节', '圣母无染原罪日', '圣诞节'],
+        holidays: ['新年', '耶穣受难日', '复活节', '劳动节', '海军节', '圣伯多禄圣保禄节', '圣母升天日', '独立日', '军队日', '哥伦布日', '宗教改革日', '万圣节', '圣母无染原罪日', '圣诞节'],
         taxRate: '25%',
         minCapital: 'CLP 1',
         description: '拉美最稳定经济体，铜矿大国',
         advantages: ['政治稳定', '经济自由', 'FTA网络广', '营商环境好'],
-        avgSetupDays: 20
+        avgSetupDays: 20,
+        hasSubRegions: true,
+        subRegions: {
+            'SCL': { name: '圣地亚哥 (Santiago)', days: 20, popular: true, description: '首都，经济中心' },
+            'VAL': { name: '瓦尔帕莱索 (Valparaiso)', days: 20, popular: false, description: '港口城市，文化中心' },
+            'CON': { name: '康塞普西翁 (Concepcion)', days: 20, popular: false, description: '第二大城市，工业中心' }
+        }
     },
 
     // ========== 大洋洲地区 ==========
@@ -505,12 +635,18 @@ const JURISDICTIONS = {
         language: ['英文', '毛利文'],
         timezone: 'GMT+12',
         workingDays: 5,
-        holidays: ['新年', '怀唐伊日', '耶稣受难日', '复活节', '澳纽军团日', '女王生日', '劳动节', '圣诞节', '节礼日'],
+        holidays: ['新年', '怀唐伊日', '耶穣受难日', '复活节', '澳纽军团日', '女王生日', '劳动节', '圣诞节', '节礼日'],
         taxRate: '28%',
         minCapital: 'NZD 1',
         description: '营商环境全球第一，政治清廉',
         advantages: ['营商便利', '政治清廉', '生活质量高', '创新能力强'],
-        avgSetupDays: 5
+        avgSetupDays: 5,
+        hasSubRegions: true,
+        subRegions: {
+            'AKL': { name: '奥克兰 (Auckland)', days: 5, popular: true, description: '最大城市，经济中心' },
+            'WLG': { name: '惠灵顿 (Wellington)', days: 5, popular: true, description: '首都，科技中心' },
+            'CHC': { name: '基督城 (Christchurch)', days: 5, popular: false, description: '南岛中心' }
+        }
     },
 
     // ========== 离岸金融中心 ==========
