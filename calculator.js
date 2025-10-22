@@ -100,22 +100,35 @@ function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData
                 taskDuration = Math.ceil(taskDuration * documentPrepMultiplier);
             }
             
-            // 处理国际快递任务
-            if (task.duration === null && task.fromCountry) {
+            // 处理国际快递任务（双向：fromCountry 或 toCountry）
+            if (task.duration === null && (task.fromCountry || task.toCountry)) {
+                let fromCountry, toCountry;
+                
+                // 判断快递方向
+                if (task.fromCountry) {
+                    // 从注册地寄出（回程快递）
+                    fromCountry = task.fromCountry;
+                    toCountry = deliveryInfo.toCountry;
+                } else if (task.toCountry) {
+                    // 寄往注册地（往程快递）
+                    fromCountry = deliveryInfo.toCountry;  // 客户所在地
+                    toCountry = task.toCountry;  // 注册地
+                }
+                
                 // 调用快递评估工具API计算
                 const expressData = calculateExpressDelivery(
-                    task.fromCountry,
-                    deliveryInfo.toCountry,
+                    fromCountry,
+                    toCountry,
                     0.5  // 假设文件重量0.5kg
                 );
                 
                 if (expressData) {
-                    expressDeliveryDays = expressData.days;
-                    taskDuration = expressDeliveryDays;
+                    expressDeliveryDays += expressData.days;
+                    taskDuration = expressData.days;
                 } else {
                     // 默认快递时间
-                    taskDuration = estimateDefaultExpressTime(task.fromCountry, deliveryInfo.toCountry);
-                    expressDeliveryDays = taskDuration;
+                    taskDuration = estimateDefaultExpressTime(fromCountry, toCountry);
+                    expressDeliveryDays += taskDuration;
                 }
             }
             

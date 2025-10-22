@@ -69,11 +69,49 @@ const SETUP_PROCESSES = {
                 },
                 {
                     phase: 2,
+                    name: 'Document Courier to HK (文件寄往香港)',
+                    description: 'Client courier signed documents to Hong Kong service provider (客户将签署文件快递至香港服务商)',
+                    duration: null,
+                    startDay: 2,
+                    endDay: null,
+                    tasks: [
+                        {
+                            taskId: 'HK-P2-T1',
+                            name: 'Courier Signed Documents (寄送签署文件)',
+                            description: 'Client courier signed and notarized documents to Hong Kong (客户将签署并公证的文件快递至香港)',
+                            duration: null,
+                            startDay: 2,
+                            endDay: null,
+                            parallel: false,
+                            parallelGroup: null,
+                            toCountry: 'HK',
+                            responsible: 'Client (客户) + Courier Company (快递公司)',
+                            documents: [
+                                'Signed Articles of Association (已签署公司章程)',
+                                'Notarized ID documents (已公证身份文件)',
+                                'Director consent letters (董事同意书)'
+                            ],
+                            requirements: [
+                                'Original documents required (需要原件)',
+                                'Proper packaging to avoid damage (妥善包装避免损坏)'
+                            ],
+                            risks: [
+                                'International courier delay (国际快递延误)',
+                                'Customs clearance time (清关时间)'
+                            ],
+                            deliverables: [
+                                'Documents received by service provider (服务商收到文件)'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    phase: 3,
                     name: 'Government Registration Phase (政府注册阶段)',
                     description: 'Submit to Companies Registry and obtain certificates (提交公司注册处并获取证书)',
                     duration: 3,
-                    startDay: 2,
-                    endDay: 5,
+                    startDay: null,
+                    endDay: null,
                     tasks: [
                         {
                             taskId: 'HK-P2-T1',
@@ -122,12 +160,12 @@ const SETUP_PROCESSES = {
                     ]
                 },
                 {
-                    phase: 3,
+                    phase: 4,
                     name: 'Post-Registration Phase (注册后阶段)',
                     description: 'Seal production and document delivery (印章制作与文件交付)',
-                    duration: 1,  // 刻章1天（快递时间在phase 4）
-                    startDay: 5,
-                    endDay: 6,
+                    duration: 1,  // 刻章1天（快递时间在phase 5）
+                    startDay: null,
+                    endDay: null,
                     tasks: [
                         {
                             taskId: 'HK-P3-T1',
@@ -151,19 +189,19 @@ const SETUP_PROCESSES = {
                     ]
                 },
                 {
-                    phase: 4,
+                    phase: 5,
                     name: 'Delivery Phase (交付阶段)',
                     description: 'International courier of all documents (全套文件国际快递)',
                     duration: null,  // 通过快递API计算
-                    startDay: 6,
+                    startDay: null,
                     endDay: null,
                     tasks: [
                         {
-                            taskId: 'HK-P4-T1',
+                            taskId: 'HK-P5-T1',
                             name: 'International Courier (文件国际快递)',
                             description: 'Courier complete company documents to client address (将全套公司文件快递至客户指定地址)',
                             duration: null,
-                            startDay: 6,
+                            startDay: null,
                             endDay: null,
                             parallel: false,
                             parallelGroup: null,
@@ -393,14 +431,52 @@ const SETUP_PROCESSES = {
                 },
                 {
                     phase: 3,
-                    name: 'ACRA Registration Phase (ACRA注册阶段)',
-                    description: 'Submit online ACRA registration application (在线提交ACRA注册申请)',
-                    duration: 3,
+                    name: 'Document Courier to SG (文件寄往新加坡)',
+                    description: 'Client courier signed documents to Singapore service provider (客户将签署文件快递至新加坡服务商)',
+                    duration: null,
                     startDay: 3,
-                    endDay: 6,
+                    endDay: null,
                     tasks: [
                         {
                             taskId: 'SG-P3-T1',
+                            name: 'Courier Signed Documents (寄送签署文件)',
+                            description: 'Client courier signed and notarized documents to Singapore (客户将签署并公证的文件快递至新加坡)',
+                            duration: null,
+                            startDay: 3,
+                            endDay: null,
+                            parallel: false,
+                            parallelGroup: null,
+                            toCountry: 'SG',
+                            responsible: 'Client (客户) + Courier Company (快递公司)',
+                            documents: [
+                                'Signed Articles of Association (已签署公司章程)',
+                                'Director/Shareholder ID documents (董事/股东身份文件)',
+                                'Notarized documents if required (公证文件（如需）)'
+                            ],
+                            requirements: [
+                                'Original documents preferred (最好是原件)',
+                                'Secure packaging (安全包装)'
+                            ],
+                            risks: [
+                                'International courier delay (国际快递延误)',
+                                'Customs clearance (清关手续)'
+                            ],
+                            deliverables: [
+                                'Documents received by service provider (服务商收到文件)'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    phase: 4,
+                    name: 'ACRA Registration Phase (ACRA注册阶段)',
+                    description: 'Submit online ACRA registration application (在线提交ACRA注册申请)',
+                    duration: 3,
+                    startDay: null,
+                    endDay: null,
+                    tasks: [
+                        {
+                            taskId: 'SG-P4-T1',
                             name: 'ACRA Registration (ACRA注册)',
                             description: 'Submit online ACRA registration application (在线提交ACRA注册申请)',
                             duration: 3,
@@ -417,15 +493,15 @@ const SETUP_PROCESSES = {
                     ]
                 },
                 {
-                    phase: 4,
+                    phase: 5,
                     name: 'Tax Registration and Seal Production (税务登记与印章制作)',
                     description: 'Tax registration with IRAS and seal production (向IRAS办理税务登记并刻制印章)',
                     duration: 2,
-                    startDay: 6,
-                    endDay: 8,
+                    startDay: null,
+                    endDay: null,
                     tasks: [
                         {
-                            taskId: 'SG-P4-T1',
+                            taskId: 'SG-P5-T1',
                             name: 'Tax Registration (税务登记)',
                             description: 'Register tax with IRAS (向IRAS办理税务登记)',
                             duration: 1,
@@ -440,7 +516,7 @@ const SETUP_PROCESSES = {
                             deliverables: ['Tax Number (税号)']
                         },
                         {
-                            taskId: 'SG-P4-T2',
+                            taskId: 'SG-P5-T2',
                             name: 'Seal Production (刻制印章)',
                             description: 'Produce company seal (制作公司印章)',
                             duration: 1,
@@ -457,15 +533,15 @@ const SETUP_PROCESSES = {
                     ]
                 },
                 {
-                    phase: 5,
+                    phase: 6,
                     name: 'International Courier (国际快递)',
                     description: 'Courier complete documents (邮寄全套文件)',
                     duration: null,
-                    startDay: 8,
+                    startDay: null,
                     endDay: null,
                     tasks: [
                         {
-                            taskId: 'SG-P5-T1',
+                            taskId: 'SG-P6-T1',
                             name: 'International Courier (国际快递)',
                             description: 'Courier complete documents (邮寄全套文件)',
                             duration: null,
@@ -541,15 +617,53 @@ const SETUP_PROCESSES = {
                 },
                 {
                     phase: 3,
-                    name: 'State Registration (州政府注册)',
-                    description: 'Submit registration to Secretary of State (向州务卿办公室提交注册)',
+                    name: 'Document Courier to US (文件寄往美国)',
+                    description: 'Client courier signed documents to US service provider (客户将签署文件快递至美国服务商)',
                     duration: null,
-                    stateDependent: true,
                     startDay: 3,
                     endDay: null,
                     tasks: [
                         {
                             taskId: 'US-P3-T1',
+                            name: 'Courier Signed Documents (寄送签署文件)',
+                            description: 'Client courier signed Articles and documents to US (客户将签署的文件快递至美国)',
+                            duration: null,
+                            startDay: 3,
+                            endDay: null,
+                            parallel: false,
+                            parallelGroup: null,
+                            toCountry: 'US',
+                            responsible: 'Client (客户) + Courier Company (快递公司)',
+                            documents: [
+                                'Signed Articles of Incorporation (已签署公司章程)',
+                                'Shareholder resolutions (股东决议)',
+                                'Notarized ID documents (公证身份文件)'
+                            ],
+                            requirements: [
+                                'Original signatures required (需要原始签名)',
+                                'Apostille for international documents (国际文件需海牙认证)'
+                            ],
+                            risks: [
+                                'International courier delay (国际快递延误)',
+                                'Customs clearance time (清关时间)'
+                            ],
+                            deliverables: [
+                                'Documents received by US service provider (美国服务商收到文件)'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    phase: 4,
+                    name: 'State Registration (州政府注册)',
+                    description: 'Submit registration to Secretary of State (向州务卿办公室提交注册)',
+                    duration: null,
+                    stateDependent: true,
+                    startDay: null,
+                    endDay: null,
+                    tasks: [
+                        {
+                            taskId: 'US-P4-T1',
                             name: 'State Government Registration (州政府注册)',
                             description: 'Submit registration to Secretary of State (向州务卿办公室提交注册)',
                             duration: null,
@@ -567,7 +681,7 @@ const SETUP_PROCESSES = {
                     ]
                 },
                 {
-                    phase: 4,
+                    phase: 5,
                     name: 'EIN Application and Bank Setup (申请EIN与银行开户准备)',
                     description: 'Apply for EIN from IRS and prepare bank account documents (向IRS申请雇主识别号并准备银行开户文件)',
                     duration: 4,
@@ -575,7 +689,7 @@ const SETUP_PROCESSES = {
                     endDay: null,
                     tasks: [
                         {
-                            taskId: 'US-P4-T1',
+                            taskId: 'US-P5-T1',
                             name: 'Apply for EIN (申请EIN)',
                             description: 'Apply for Employer Identification Number from IRS (向IRS申请雇主识别号)',
                             duration: 3,
@@ -590,7 +704,7 @@ const SETUP_PROCESSES = {
                             deliverables: ['EIN Number (EIN号码)']
                         },
                         {
-                            taskId: 'US-P4-T2',
+                            taskId: 'US-P5-T2',
                             name: 'Bank Account Setup Preparation (银行开户准备)',
                             description: 'Prepare documents for bank account opening (准备银行开户所需文件)',
                             duration: 1,
@@ -607,7 +721,7 @@ const SETUP_PROCESSES = {
                     ]
                 },
                 {
-                    phase: 5,
+                    phase: 6,
                     name: 'International Courier (国际快递)',
                     description: 'Courier company documents (邮寄公司文件)',
                     duration: null,
@@ -615,7 +729,7 @@ const SETUP_PROCESSES = {
                     endDay: null,
                     tasks: [
                         {
-                            taskId: 'US-P5-T1',
+                            taskId: 'US-P6-T1',
                             name: 'International Courier (国际快递)',
                             description: 'Courier company documents (邮寄公司文件)',
                             duration: null,
