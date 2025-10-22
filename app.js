@@ -42,21 +42,21 @@ function handleJurisdictionChange(jurisdictionCode) {
         
         // 更新标签
         if (jurisdictionCode === 'US') {
-            subRegionLabel.textContent = '州/城市';
-            subRegionHint.textContent = '不同州的注册时效和税率差异较大，请根据业务需求选择';
+            subRegionLabel.textContent = 'State/City (州/城市)';
+            subRegionHint.textContent = 'Registration timeline and tax rates vary significantly by state, please select based on your business needs (不同州的注册时效和税率差异较大，请根据业务需求选择)';
         } else if (jurisdictionCode === 'CA') {
-            subRegionLabel.textContent = '省/城市';
-            subRegionHint.textContent = '不同省份的税率和政策有所不同';
+            subRegionLabel.textContent = 'Province/City (省/城市)';
+            subRegionHint.textContent = 'Tax rates and policies vary by province (不同省份的税率和政策有所不同)';
         } else if (jurisdictionCode === 'AU') {
-            subRegionLabel.textContent = '州/城市';
-            subRegionHint.textContent = '不同州的政策和营商环境有所差异';
+            subRegionLabel.textContent = 'State/City (州/城市)';
+            subRegionHint.textContent = 'Policies and business environment vary by state (不同州的政策和营商环境有所差异)';
         } else {
-            subRegionLabel.textContent = '城市/地区';
-            subRegionHint.textContent = '不同城市/地区的注册时效和费用可能不同';
+            subRegionLabel.textContent = 'City/Region (城市/地区)';
+            subRegionHint.textContent = 'Registration timeline and fees may vary by city/region (不同城市/地区的注册时效和费用可能不同)';
         }
         
         // 清空并重新填充选项
-        subRegionSelect.innerHTML = '<option value="">请选择</option>';
+        subRegionSelect.innerHTML = '<option value="">Please select (请选择)</option>';
         
         // 按照popular先后排序
         const regions = Object.entries(jurisdiction.subRegions).sort((a, b) => {
@@ -71,10 +71,10 @@ function handleJurisdictionChange(jurisdictionCode) {
             // 构建选项文本
             let text = region.name;
             if (region.days) {
-                text += ` - ${region.days}天`;
+                text += ` - ${region.days} days (天)`;
             }
             if (region.tax) {
-                text += ` (税率: ${region.tax})`;
+                text += ` (Tax Rate (税率): ${region.tax})`;
             }
             if (region.popular) {
                 text = '★ ' + text;
@@ -213,8 +213,8 @@ function showSuppliers() {
     
     let html = `
         <div class="suppliers-header">
-            <h2>🏆 推荐供应商 - ${jurisdictionInfo.flag} ${jurisdictionInfo.name}</h2>
-            <p>已为您匹配 <strong>${suppliers.length}</strong> 家专业服务商</p>
+            <h2>🏆 Recommended Suppliers (推荐供应商) - ${jurisdictionInfo.flag} ${jurisdictionInfo.name}</h2>
+            <p>We have matched <strong>${suppliers.length}</strong> professional service providers for you (已为您匹配 <strong>${suppliers.length}</strong> 家专业服务商)</p>
         </div>
     `;
     
@@ -222,7 +222,7 @@ function showSuppliers() {
         const isRecommended = index === 0;
         html += `
             <div class="supplier-card ${isRecommended ? 'recommended' : ''}">
-                ${isRecommended ? '<div class="recommended-badge">⭐ 推荐首选</div>' : ''}
+                ${isRecommended ? '<div class="recommended-badge">⭐ Top Recommendation (推荐首选)</div>' : ''}
                 <div class="supplier-header">
                     <h3>${supplier.name}</h3>
                     <div class="supplier-rating">
@@ -232,34 +232,34 @@ function showSuppliers() {
                 </div>
                 <div class="supplier-info">
                     <div class="info-item">
-                        <span class="label">从业经验</span>
-                        <span class="value">${supplier.experience} 年</span>
+                        <span class="label">Experience (从业经验)</span>
+                        <span class="value">${supplier.experience} Years (年)</span>
                     </div>
                     <div class="info-item">
-                        <span class="label">完成案例</span>
-                        <span class="value">${supplier.completedCases.toLocaleString()} 家</span>
+                        <span class="label">Completed Cases (完成案例)</span>
+                        <span class="value">${supplier.completedCases.toLocaleString()} Companies (家)</span>
                     </div>
                     <div class="info-item">
-                        <span class="label">服务费</span>
+                        <span class="label">Service Fee (服务费)</span>
                         <span class="value price">${formatPrice(supplier.price.service)}</span>
                     </div>
                     <div class="info-item">
-                        <span class="label">政府费用</span>
+                        <span class="label">Government Fee (政府费用)</span>
                         <span class="value">${formatPrice(supplier.price.government)}</span>
                     </div>
                     <div class="info-item total">
-                        <span class="label">总费用</span>
+                        <span class="label">Total Fee (总费用)</span>
                         <span class="value price-total">${formatPrice(supplier.price.total)}</span>
                     </div>
                 </div>
                 <div class="supplier-advantages">
-                    <h4>服务优势：</h4>
+                    <h4>Service Advantages (服务优势):</h4>
                     <div class="tags">
                         ${supplier.advantages.map(adv => `<span class="tag">${adv}</span>`).join('')}
                     </div>
                 </div>
                 <div class="supplier-certifications">
-                    <strong>资质认证：</strong>
+                    <strong>Certifications (资质认证):</strong>
                     ${supplier.certifications.map(cert => `<span class="cert">${cert}</span>`).join(' | ')}
                 </div>
                 <div class="supplier-contact">
@@ -267,7 +267,7 @@ function showSuppliers() {
                     <span>📧 ${supplier.contact.email}</span>
                 </div>
                 <button class="btn-select" onclick="selectSupplier('${supplier.id}')">
-                    查看详细流程
+                    View Detailed Process (查看详细流程)
                 </button>
             </div>
         `;
@@ -307,18 +307,18 @@ function showTimeline() {
     
     let html = `
         <div class="timeline-header">
-            <h2>📅 设立流程时间线 - ${jurisdictionDisplay}</h2>
+            <h2>📅 Setup Process Timeline (设立流程时间线) - ${jurisdictionDisplay}</h2>
             <div class="timeline-summary">
                 <div class="summary-item">
-                    <span class="label">总工作日</span>
-                    <span class="value">${timeline.totalWorkingDays} 天</span>
+                    <span class="label">Total Working Days (总工作日)</span>
+                    <span class="value">${timeline.totalWorkingDays} Days (天)</span>
                 </div>
                 <div class="summary-item">
-                    <span class="label">预计自然日</span>
-                    <span class="value">${timeline.totalCalendarDays} 天</span>
+                    <span class="label">Estimated Calendar Days (预计自然日)</span>
+                    <span class="value">${timeline.totalCalendarDays} Days (天)</span>
                 </div>
                 <div class="summary-item">
-                    <span class="label">预计完成日期</span>
+                    <span class="label">Expected Completion Date (预计完成日期)</span>
                     <span class="value">${calculateCompletionDate(timeline.totalWorkingDays, formData.jurisdiction).toLocaleDateString('zh-CN')}</span>
                 </div>
             </div>
@@ -334,13 +334,13 @@ function showTimeline() {
                     <div class="step-content">
                         <div class="step-header">
                             <h3>${step.name}</h3>
-                            <span class="step-duration">${step.actualDuration} 工作日</span>
+                            <span class="step-duration">${step.actualDuration} Working Days (工作日)</span>
                         </div>
                         <p class="step-description">${step.description}</p>
                         
                         ${step.documents && step.documents.length > 0 ? `
                             <div class="step-documents">
-                                <strong>📄 所需文件：</strong>
+                                <strong>📄 Required Documents (所需文件):</strong>
                                 <ul>
                                     ${step.documents.map(doc => `<li>${doc}</li>`).join('')}
                                 </ul>
@@ -349,7 +349,7 @@ function showTimeline() {
                         
                         ${step.requirements && step.requirements.length > 0 ? `
                             <div class="step-requirements">
-                                <strong>✅ 要求：</strong>
+                                <strong>✅ Requirements (要求):</strong>
                                 <ul>
                                     ${step.requirements.map(req => `<li>${req}</li>`).join('')}
                                 </ul>
@@ -358,7 +358,7 @@ function showTimeline() {
                         
                         ${step.risks && step.risks.length > 0 ? `
                             <div class="step-risks">
-                                <strong>⚠️ 风险提示：</strong>
+                                <strong>⚠️ Risk Alerts (风险提示):</strong>
                                 <ul>
                                     ${step.risks.map(risk => `<li>${risk}</li>`).join('')}
                                 </ul>
@@ -367,16 +367,16 @@ function showTimeline() {
                         
                         ${step.deliverables && step.deliverables.length > 0 ? `
                             <div class="step-deliverables">
-                                <strong>📦 交付物：</strong>
+                                <strong>📦 Deliverables (交付物):</strong>
                                 ${step.deliverables.map(del => `<span class="deliverable">${del}</span>`).join(' ')}
                             </div>
                         ` : ''}
                         
                         ${step.fromCountry ? `
                             <div class="express-info">
-                                <strong>🚚 快递信息：</strong>
-                                <span>从 ${step.fromCountry} 寄往 ${formData.deliveryCountry}</span>
-                                <span class="express-duration">预计 ${step.actualDuration} 工作日</span>
+                                <strong>🚚 Express Information (快递信息):</strong>
+                                <span>From (从) ${step.fromCountry} To (寄往) ${formData.deliveryCountry}</span>
+                                <span class="express-duration">Estimated (预计) ${step.actualDuration} Working Days (工作日)</span>
                             </div>
                         ` : ''}
                     </div>
@@ -385,7 +385,7 @@ function showTimeline() {
         </div>
         
         <div class="risk-alerts">
-            <h3>⚠️ 重要提示</h3>
+            <h3>⚠️ Important Notices (重要提示)</h3>
             ${timeline.risks.map(risk => `
                 <div class="alert alert-${risk.level}">
                     <strong>${risk.title}</strong>
@@ -395,7 +395,7 @@ function showTimeline() {
         </div>
         
         <div class="documents-checklist">
-            <h3>📋 文件准备清单</h3>
+            <h3>📋 Documents Preparation Checklist (文件准备清单)</h3>
             ${renderDocumentsChecklist()}
         </div>
     `;
@@ -415,10 +415,10 @@ function renderDocumentsChecklist() {
                 <table class="doc-table">
                     <thead>
                         <tr>
-                            <th>文件名称</th>
-                            <th>说明</th>
-                            <th>是否必须</th>
-                            <th>公证认证</th>
+                            <th>Document Name (文件名称)</th>
+                            <th>Description (说明)</th>
+                            <th>Required (是否必须)</th>
+                            <th>Notarization (公证认证)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -426,8 +426,8 @@ function renderDocumentsChecklist() {
                             <tr>
                                 <td>${doc.name}</td>
                                 <td>${doc.description}</td>
-                                <td>${doc.required ? '<span class="required">必须</span>' : '<span class="optional">可选</span>'}</td>
-                                <td>${doc.certify ? '需要' : '不需要'}</td>
+                                <td>${doc.required ? '<span class="required">Required (必须)</span>' : '<span class="optional">Optional (可选)</span>'}</td>
+                                <td>${doc.certify ? 'Yes (需要)' : 'No (不需要)'}</td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -482,34 +482,34 @@ function addShareholder() {
     const html = `
         <div class="shareholder-item" data-index="${index}">
             <div class="item-header">
-                <h4>股东 #${index + 1}</h4>
-                <button type="button" class="btn-remove" onclick="removeShareholder(this)">删除</button>
+                <h4>Shareholder (股东) #${index + 1}</h4>
+                <button type="button" class="btn-remove" onclick="removeShareholder(this)">Remove (删除)</button>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label>股东类型</label>
+                    <label>Shareholder Type (股东类型)</label>
                     <select name="shareholderType[]" class="shareholderType">
-                        <option value="individual">个人</option>
-                        <option value="corporate">公司</option>
+                        <option value="individual">Individual (个人)</option>
+                        <option value="corporate">Corporate (公司)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>姓名/公司名</label>
+                    <label>Name/Company Name (姓名/公司名)</label>
                     <input type="text" name="shareholderName[]" placeholder="Full Name / Company Name">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label>国籍/注册地</label>
+                    <label>Nationality/Jurisdiction (国籍/注册地)</label>
                     <input type="text" name="shareholderNationality[]" placeholder="China">
                 </div>
                 <div class="form-group">
-                    <label>持股比例 (%)</label>
+                    <label>Shareholding Percentage (持股比例) (%)</label>
                     <input type="number" name="shareholderPercentage[]" min="0" max="100" step="0.01">
                 </div>
             </div>
             <div class="form-group">
-                <label>地址</label>
+                <label>Address (地址)</label>
                 <input type="text" name="shareholderAddress[]" placeholder="Complete Address">
             </div>
         </div>
@@ -531,25 +531,25 @@ function addDirector() {
     const html = `
         <div class="director-item" data-index="${index}">
             <div class="item-header">
-                <h4>董事 #${index + 1}</h4>
-                <button type="button" class="btn-remove" onclick="removeDirector(this)">删除</button>
+                <h4>Director (董事) #${index + 1}</h4>
+                <button type="button" class="btn-remove" onclick="removeDirector(this)">Remove (删除)</button>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label>姓名</label>
+                    <label>Name (姓名)</label>
                     <input type="text" name="directorName[]" placeholder="Full Name">
                 </div>
                 <div class="form-group">
-                    <label>国籍</label>
+                    <label>Nationality (国籍)</label>
                     <input type="text" name="directorNationality[]" placeholder="China">
                 </div>
             </div>
             <div class="form-group">
-                <label>地址</label>
+                <label>Address (地址)</label>
                 <input type="text" name="directorAddress[]" placeholder="Complete Address">
             </div>
             <div class="form-group">
-                <label>联系方式</label>
+                <label>Contact Information (联系方式)</label>
                 <input type="email" name="directorEmail[]" placeholder="Email">
             </div>
         </div>
