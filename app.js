@@ -40,7 +40,7 @@ function handleShareholderCountChange() {
     const multipleContainer = document.getElementById('shareholderNationalityMultiple');
     const label = document.getElementById('shareholderNationalityLabel');
     
-    if (count > 2) {
+    if (count >= 2) {
         // 显示多选
         singleSelect.style.display = 'none';
         multipleContainer.style.display = 'block';
@@ -62,7 +62,7 @@ function handleDirectorCountChange() {
     const multipleContainer = document.getElementById('directorNationalityMultiple');
     const label = document.getElementById('directorNationalityLabel');
     
-    if (count > 2) {
+    if (count >= 2) {
         // 显示多选
         singleSelect.style.display = 'none';
         multipleContainer.style.display = 'block';
