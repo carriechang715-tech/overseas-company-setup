@@ -125,11 +125,9 @@
                                     <label for="companyType">Company Type (公司类型) <span class="required">*</span></label>
                                     <select id="companyType" name="companyType" required>
                                         <option value="">Please select (请选择)</option>
-                                        <option value="LLC">Limited Liability Company (有限责任公司) - LLC</option>
-                                        <option value="Corp">Corporation (股份有限公司) - Corp</option>
-                                        <option value="Limited">Private Limited (私人有限公司) - Ltd</option>
-                                        <option value="Branch">Branch (分公司)</option>
+                                        <!-- 选项将根据所选国家动态加载 -->
                                     </select>
+                                    <small class="hint">Company types vary by jurisdiction (不同国家的公司类型不同)</small>
                                 </div>
                             </div>
 

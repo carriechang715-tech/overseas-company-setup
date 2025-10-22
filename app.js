@@ -19,6 +19,9 @@ function initializeForm() {
     jurisdiction.addEventListener('change', function() {
         handleJurisdictionChange(this.value);
     });
+    
+    // 初始化时加载默认公司类型
+    updateCompanyTypes(DEFAULT_COMPANY_TYPES);
 }
 
 // 处理注册地变化
@@ -27,13 +30,20 @@ function handleJurisdictionChange(jurisdictionCode) {
     const subRegionSelect = document.getElementById('subRegion');
     const subRegionLabel = document.getElementById('subRegionLabel');
     const subRegionHint = document.getElementById('subRegionHint');
+    const companyTypeSelect = document.getElementById('companyType');
     
     if (!jurisdictionCode || !JURISDICTIONS[jurisdictionCode]) {
         subRegionGroup.style.display = 'none';
+        // 重置为默认公司类型
+        updateCompanyTypes(DEFAULT_COMPANY_TYPES);
         return;
     }
     
     const jurisdiction = JURISDICTIONS[jurisdictionCode];
+    
+    // 更新公司类型选项
+    const companyTypes = jurisdiction.companyTypes || DEFAULT_COMPANY_TYPES;
+    updateCompanyTypes(companyTypes);
     
     // 检查是否有子地区
     if (jurisdiction.hasSubRegions && jurisdiction.subRegions) {
@@ -85,6 +95,40 @@ function handleJurisdictionChange(jurisdictionCode) {
         // 隐藏子地区选择框
         subRegionGroup.style.display = 'none';
         subRegionSelect.value = '';
+    }
+}
+
+// 更新公司类型选项
+function updateCompanyTypes(companyTypes) {
+    const companyTypeSelect = document.getElementById('companyType');
+    const currentValue = companyTypeSelect.value;
+    
+    // 清空现有选项
+    companyTypeSelect.innerHTML = '<option value="">Please select (请选择)</option>';
+    
+    // 按照popular先后排序
+    const sortedTypes = [...companyTypes].sort((a, b) => {
+        if (a.popular === b.popular) return 0;
+        return a.popular ? -1 : 1;
+    });
+    
+    // 添加选项
+    sortedTypes.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type.value;
+        option.textContent = type.label;
+        
+        // 如果是热门类型，添加星号标记
+        if (type.popular) {
+            option.textContent = '★ ' + option.textContent;
+        }
+        
+        companyTypeSelect.appendChild(option);
+    });
+    
+    // 尝试保持之前选中的值（如果该选项在新列表中存在）
+    if (currentValue && companyTypes.some(t => t.value === currentValue)) {
+        companyTypeSelect.value = currentValue;
     }
 }
 

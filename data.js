@@ -17,6 +17,12 @@ const JURISDICTIONS = {
         description: '国际金融中心，税制简单，注册便捷',
         advantages: ['低税率', '无外汇管制', '法律体系健全', '地理位置优越'],
         avgSetupDays: 5,
+        companyTypes: [
+            { value: 'Limited', label: 'Private Limited Company (私人有限公司) - Ltd', popular: true },
+            { value: 'PublicLimited', label: 'Public Limited Company (公众有限公司) - PLC', popular: false },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false },
+            { value: 'RepOffice', label: 'Representative Office (代表处)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'HK_ISLAND': { name: '香港岛', days: 5, popular: true },
@@ -38,6 +44,13 @@ const JURISDICTIONS = {
         description: '亚洲金融中心，营商环境优越',
         advantages: ['政治稳定', '税务优惠', '国际声誉好', '基础设施完善'],
         avgSetupDays: 8,
+        companyTypes: [
+            { value: 'PteLtd', label: 'Private Limited (私人有限公司) - Pte Ltd', popular: true },
+            { value: 'PublicLtd', label: 'Public Limited (公众有限公司) - Ltd', popular: false },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false },
+            { value: 'RepOffice', label: 'Representative Office (代表处)', popular: false },
+            { value: 'LLP', label: 'Limited Liability Partnership (有限责任合伙) - LLP', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'CENTRAL': { name: '中心区', days: 8, popular: true },
@@ -281,6 +294,12 @@ const JURISDICTIONS = {
         description: '欧洲金融中心，法律制度完善',
         advantages: ['法律健全', '金融发达', '国际认可度高', '英语国家'],
         avgSetupDays: 6,
+        companyTypes: [
+            { value: 'Limited', label: 'Private Limited Company (私人有限公司) - Ltd', popular: true },
+            { value: 'PLC', label: 'Public Limited Company (公众有限公司) - PLC', popular: false },
+            { value: 'LLP', label: 'Limited Liability Partnership (有限责任合伙) - LLP', popular: false },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'LONDON': { name: '伦敦 (London)', days: 6, popular: true, description: '金融中心，国际化' },
@@ -502,6 +521,13 @@ const JURISDICTIONS = {
         description: '全球最大经济体，商业机会多',
         advantages: ['市场巨大', '融资便利', '法律保护', '品牌效应'],
         avgSetupDays: 12,
+        companyTypes: [
+            { value: 'LLC', label: 'Limited Liability Company (有限责任公司) - LLC', popular: true },
+            { value: 'Corp', label: 'Corporation (股份有限公司) - Corp / Inc', popular: true },
+            { value: 'SCorp', label: 'S Corporation (S型公司) - S-Corp', popular: false },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false },
+            { value: 'LLP', label: 'Limited Liability Partnership (有限责任合伙) - LLP', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'DE': { name: '特拉华州 (Delaware)', days: 2, tax: '无州税', popular: true, description: '最佳注册地，公司法完善' },
@@ -663,7 +689,11 @@ const JURISDICTIONS = {
         minCapital: 'USD 1',
         description: '经典离岸中心，保密性强',
         advantages: ['零税率', '高度保密', '快速设立', '无需审计'],
-        avgSetupDays: 3
+        avgSetupDays: 3,
+        companyTypes: [
+            { value: 'BC', label: 'Business Company (BVI商业公司) - BC', popular: true },
+            { value: 'Limited', label: 'Limited Company (有限公司) - Ltd', popular: false }
+        ]
     },
     'Cayman': {
         name: '开曼群岛',
@@ -678,7 +708,12 @@ const JURISDICTIONS = {
         minCapital: 'USD 1',
         description: '顶级离岸金融中心，适合上市架构',
         advantages: ['零税率', '政治稳定', '监管完善', '适合上市架构'],
-        avgSetupDays: 5
+        avgSetupDays: 5,
+        companyTypes: [
+            { value: 'ExemptedCompany', label: 'Exempted Company (豁免公司)', popular: true },
+            { value: 'OrdinaryCompany', label: 'Ordinary Resident Company (普通居民公司)', popular: false },
+            { value: 'LLC', label: 'Limited Liability Company (LLC)', popular: false }
+        ]
     },
     'Seychelles': {
         name: '塞舌尔',
@@ -795,6 +830,14 @@ const SUPPLIERS = [
         certifications: ['特许秘书', '会计师', '信托牌照'],
         contact: { phone: '+852-9876-5432', email: 'cs@hk-consulting.com' }
     }
+];
+
+// 通用公司类型配置（用于没有特定配置的国家）
+const DEFAULT_COMPANY_TYPES = [
+    { value: 'LLC', label: 'Limited Liability Company (有限责任公司) - LLC', popular: true },
+    { value: 'Corp', label: 'Corporation (股份有限公司) - Corp', popular: true },
+    { value: 'Limited', label: 'Private Limited (私人有限公司) - Ltd', popular: true },
+    { value: 'Branch', label: 'Branch (分公司)', popular: false }
 ];
 
 // 文件清单配置
