@@ -8,6 +8,7 @@ let selectedSupplier = null;
 document.addEventListener('DOMContentLoaded', function() {
     initializeForm();
     setupEventListeners();
+    setupOtherServiceToggle();
 });
 
 // 初始化表单
@@ -90,6 +91,25 @@ function handleJurisdictionChange(jurisdictionCode) {
     }
 }
 
+// 设置"其他"选项切换
+function setupOtherServiceToggle() {
+    const otherCheckbox = document.getElementById('otherServiceCheckbox');
+    const otherGroup = document.getElementById('otherServiceGroup');
+    const otherInput = document.getElementById('otherServiceInput');
+    
+    if (otherCheckbox) {
+        otherCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                otherGroup.style.display = 'block';
+                otherInput.focus();
+            } else {
+                otherGroup.style.display = 'none';
+                otherInput.value = '';
+            }
+        });
+    }
+}
+
 // 设置事件监听
 function setupEventListeners() {
     const form = document.getElementById('companyForm');
@@ -168,7 +188,18 @@ function collectDirectors() {
 function collectServices() {
     const services = [];
     document.querySelectorAll('[name="services[]"]:checked').forEach(cb => {
-        services.push(cb.value);
+        if (cb.value === 'other') {
+            // 如果选了"其他"，收集用户输入的内容
+            const otherInput = document.getElementById('otherServiceInput');
+            if (otherInput && otherInput.value.trim()) {
+                services.push({
+                    type: 'other',
+                    description: otherInput.value.trim()
+                });
+            }
+        } else {
+            services.push(cb.value);
+        }
     });
     return services;
 }

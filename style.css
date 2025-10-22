@@ -380,6 +380,45 @@ textarea {
     cursor: pointer;
 }
 
+/* 其他服务输入框样式 */
+#otherServiceGroup {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(6, 182, 212, 0.02) 100%);
+    border-left: 3px solid var(--info-color);
+    border-radius: var(--radius-sm);
+    animation: slideDown var(--transition-base);
+}
+
+#otherServiceGroup label {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+#otherServiceInput {
+    border: 2px solid var(--info-color);
+    background: var(--bg-primary);
+    transition: all var(--transition-base);
+}
+
+#otherServiceInput:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ==========================================
    动态项目（股东/董事）
    ========================================== */
