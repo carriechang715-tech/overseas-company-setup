@@ -409,61 +409,96 @@ function showTimeline() {
             </div>
         </div>
         
-        <div class="timeline-steps">
-            ${timeline.steps.map((step, index) => `
-                <div class="timeline-step">
-                    <div class="step-marker">
-                        <div class="step-number">${step.step}</div>
-                        <div class="step-line"></div>
+        <div class="timeline-phases">
+            ${timeline.phases.map((phase, phaseIndex) => `
+                <div class="timeline-phase">
+                    <div class="phase-header">
+                        <div class="phase-number">Phase ${phase.phase} (阶段 ${phase.phase})</div>
+                        <h3 class="phase-name">${phase.name}</h3>
+                        <span class="phase-duration">${phase.actualDuration} Working Days (工作日)</span>
                     </div>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <h3>${step.name}</h3>
-                            <span class="step-duration">${step.actualDuration} Working Days (工作日)</span>
-                        </div>
-                        <p class="step-description">${step.description}</p>
-                        
-                        ${step.documents && step.documents.length > 0 ? `
-                            <div class="step-documents">
-                                <strong>📄 Required Documents (所需文件):</strong>
-                                <ul>
-                                    ${step.documents.map(doc => `<li>${doc}</li>`).join('')}
-                                </ul>
+                    <p class="phase-description">${phase.description}</p>
+                    
+                    <!-- 阶段内的任务列表 -->
+                    <div class="phase-tasks">
+                        ${phase.tasks.map((task, taskIndex) => {
+                            const isParallel = task.parallel && task.parallelGroup;
+                            const parallelGroupTasks = isParallel ? phase.tasks.filter(t => t.parallelGroup === task.parallelGroup) : [];
+                            const isFirstInGroup = isParallel && parallelGroupTasks[0].taskId === task.taskId;
+                            
+                            return `
+                            <div class="task-item ${isParallel ? 'parallel-task' : 'sequential-task'}" data-task-id="${task.taskId}">
+                                ${isParallel && isFirstInGroup ? `
+                                    <div class="parallel-indicator">
+                                        ⚡ Parallel Tasks (并行处理 ${parallelGroupTasks.length} items) - Can be done simultaneously (可同时进行)
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="task-header">
+                                    <div class="task-number">${phaseIndex + 1}.${taskIndex + 1}</div>
+                                    <div class="task-info">
+                                        <h4 class="task-name">${task.name}</h4>
+                                        <div class="task-meta">
+                                            <span class="task-duration">⏱ ${task.actualDuration} Working Days (工作日)</span>
+                                            <span class="task-timeline">📅 Day ${task.startDay}-${task.endDay}</span>
+                                            ${task.responsible ? `<span class="task-responsible">👤 ${task.responsible}</span>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p class="task-description">${task.description}</p>
+                                
+                                ${task.documents && task.documents.length > 0 ? `
+                                    <div class="task-documents">
+                                        <strong>📄 Required Documents (所需文件):</strong>
+                                        <ul>
+                                            ${task.documents.map(doc => `<li>${doc}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+                                
+                                ${task.requirements && task.requirements.length > 0 ? `
+                                    <div class="task-requirements">
+                                        <strong>✅ Requirements (要求):</strong>
+                                        <ul>
+                                            ${task.requirements.map(req => `<li>${req}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+                                
+                                ${task.risks && task.risks.length > 0 ? `
+                                    <div class="task-risks">
+                                        <strong>⚠️ Risk Alerts (风险提示):</strong>
+                                        <ul>
+                                            ${task.risks.map(risk => `<li>${risk}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+                                
+                                ${task.deliverables && task.deliverables.length > 0 ? `
+                                    <div class="task-deliverables">
+                                        <strong>📦 Deliverables (交付物):</strong>
+                                        ${task.deliverables.map(del => `<span class="deliverable">${del}</span>`).join(' ')}
+                                    </div>
+                                ` : ''}
+                                
+                                ${task.fromCountry ? `
+                                    <div class="express-info">
+                                        <strong>🚚 Express Information (快递信息):</strong>
+                                        <span>From (从) ${task.fromCountry} To (寄往) ${formData.deliveryCountry}</span>
+                                        <span class="express-duration">Estimated (预计) ${task.actualDuration} Working Days (工作日)</span>
+                                    </div>
+                                ` : ''}
                             </div>
-                        ` : ''}
-                        
-                        ${step.requirements && step.requirements.length > 0 ? `
-                            <div class="step-requirements">
-                                <strong>✅ Requirements (要求):</strong>
-                                <ul>
-                                    ${step.requirements.map(req => `<li>${req}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        
-                        ${step.risks && step.risks.length > 0 ? `
-                            <div class="step-risks">
-                                <strong>⚠️ Risk Alerts (风险提示):</strong>
-                                <ul>
-                                    ${step.risks.map(risk => `<li>${risk}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        
-                        ${step.deliverables && step.deliverables.length > 0 ? `
-                            <div class="step-deliverables">
-                                <strong>📦 Deliverables (交付物):</strong>
-                                ${step.deliverables.map(del => `<span class="deliverable">${del}</span>`).join(' ')}
-                            </div>
-                        ` : ''}
-                        
-                        ${step.fromCountry ? `
-                            <div class="express-info">
-                                <strong>🚚 Express Information (快递信息):</strong>
-                                <span>From (从) ${step.fromCountry} To (寄往) ${formData.deliveryCountry}</span>
-                                <span class="express-duration">Estimated (预计) ${step.actualDuration} Working Days (工作日)</span>
-                            </div>
-                        ` : ''}
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <!-- 阶段总结 -->
+                    <div class="phase-summary">
+                        <strong>Phase ${phase.phase} Summary (阶段${phase.phase}总结):</strong>
+                        Duration: ${phase.actualDuration} working days (工作日) | 
+                        Timeline: Day ${phase.startDay} - Day ${phase.endDay}
                     </div>
                 </div>
             `).join('')}

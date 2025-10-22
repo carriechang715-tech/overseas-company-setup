@@ -2,19 +2,28 @@
 
 // 计算总流程时间（基于用户表单数据动态调整）
 function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData = {}) {
-    let processSteps = SETUP_PROCESSES[jurisdiction]?.[supplierId] || [];
+    let processConfig = SETUP_PROCESSES[jurisdiction]?.[supplierId];
     
     // 如果没有该供应商的流程数据，使用第一个可用的供应商流程
-    if (processSteps.length === 0) {
+    if (!processConfig) {
         const availableSuppliers = Object.keys(SETUP_PROCESSES[jurisdiction] || {});
         if (availableSuppliers.length > 0) {
-            processSteps = SETUP_PROCESSES[jurisdiction][availableSuppliers[0]];
+            processConfig = SETUP_PROCESSES[jurisdiction][availableSuppliers[0]];
         }
+    }
+    
+    if (!processConfig || !processConfig.phases) {
+        return {
+            totalWorkingDays: 0,
+            totalCalendarDays: 0,
+            phases: [],
+            expressDeliveryDays: 0
+        };
     }
     
     let totalWorkingDays = 0;
     let expressDeliveryDays = 0;
-    const steps = [];
+    const phases = [];
     
     // 基础时效调整系数（基于子地区）
     let baseTimeMultiplier = 1.0;
@@ -40,116 +49,213 @@ function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData
         documentPrepMultiplier += (directorCount - 1) * 0.1;
     }
     
-    processSteps.forEach((step, index) => {
-        let stepDuration = step.duration;
+    let currentDay = 0;
+    
+    // 处理每个阶段
+    processConfig.phases.forEach((phase, phaseIndex) => {
+        const phaseStartDay = currentDay;
+        let phaseDuration = 0;
+        const tasks = [];
         
-        // 处理州/地区相关的特殊情况
-        if (step.stateDependent && jurisdiction === 'US' && deliveryInfo.subRegion) {
-            const stateInfo = JURISDICTIONS.US.subRegions?.[deliveryInfo.subRegion];
-            stepDuration = stateInfo?.days || 10;
-        }
+        // 并行任务组追踪
+        const parallelGroups = {};
         
-        // 应用子地区时效系数到所有步骤
-        if (stepDuration && stepDuration > 0 && baseTimeMultiplier !== 1.0) {
-            stepDuration = Math.ceil(stepDuration * baseTimeMultiplier);
-        }
-        
-        // 文件准备步骤受股东董事数量影响
-        if (step.name.includes('准备') || step.name.includes('文件') || step.name.includes('公证')) {
-            if (stepDuration && stepDuration > 0 && documentPrepMultiplier > 1.0) {
-                stepDuration = Math.ceil(stepDuration * documentPrepMultiplier);
-            }
-        }
-        
-        // 处理国际快递步骤
-        if (step.duration === null && step.fromCountry) {
-            // 调用快递评估工具API计算
-            const expressData = calculateExpressDelivery(
-                step.fromCountry,
-                deliveryInfo.toCountry,
-                0.5  // 假设文件重量0.5kg
-            );
+        // 处理阶段内的每个任务
+        phase.tasks.forEach((task, taskIndex) => {
+            let taskDuration = task.duration;
             
-            if (expressData) {
-                expressDeliveryDays = expressData.days;
-                stepDuration = expressDeliveryDays;
-            } else {
-                // 默认快递时间
-                stepDuration = estimateDefaultExpressTime(step.fromCountry, deliveryInfo.toCountry);
+            // 处理州/地区相关的特殊情况
+            if (task.stateDependent && jurisdiction === 'US' && deliveryInfo.subRegion) {
+                const stateInfo = JURISDICTIONS.US.subRegions?.[deliveryInfo.subRegion];
+                taskDuration = stateInfo?.days || 10;
             }
-        }
+            
+            // 应用子地区时效系数
+            if (taskDuration && taskDuration > 0 && baseTimeMultiplier !== 1.0) {
+                taskDuration = Math.ceil(taskDuration * baseTimeMultiplier);
+            }
+            
+            // 文件准备任务受股东董事数量影响
+            if ((task.name.includes('准备') || task.name.includes('文件') || task.name.includes('公证') ||
+                 task.name.includes('Preparation') || task.name.includes('Document') || task.name.includes('Notarization')) &&
+                taskDuration && taskDuration > 0 && documentPrepMultiplier > 1.0) {
+                taskDuration = Math.ceil(taskDuration * documentPrepMultiplier);
+            }
+            
+            // 处理国际快递任务
+            if (task.duration === null && task.fromCountry) {
+                // 调用快递评估工具API计算
+                const expressData = calculateExpressDelivery(
+                    task.fromCountry,
+                    deliveryInfo.toCountry,
+                    0.5  // 假设文件重量0.5kg
+                );
+                
+                if (expressData) {
+                    expressDeliveryDays = expressData.days;
+                    taskDuration = expressDeliveryDays;
+                } else {
+                    // 默认快递时间
+                    taskDuration = estimateDefaultExpressTime(task.fromCountry, deliveryInfo.toCountry);
+                    expressDeliveryDays = taskDuration;
+                }
+            }
+            
+            // 计算任务的起止时间
+            let taskStartDay, taskEndDay;
+            
+            if (task.parallel && task.parallelGroup) {
+                // 并行任务：属于同一个parallelGroup的任务同时开始
+                if (!parallelGroups[task.parallelGroup]) {
+                    parallelGroups[task.parallelGroup] = {
+                        startDay: currentDay,
+                        maxDuration: taskDuration || 0
+                    };
+                } else {
+                    parallelGroups[task.parallelGroup].maxDuration = Math.max(
+                        parallelGroups[task.parallelGroup].maxDuration,
+                        taskDuration || 0
+                    );
+                }
+                
+                taskStartDay = parallelGroups[task.parallelGroup].startDay;
+                taskEndDay = taskStartDay + (taskDuration || 0);
+            } else {
+                // 串行任务：按顺序执行
+                taskStartDay = currentDay;
+                taskEndDay = currentDay + (taskDuration || 0);
+                currentDay = taskEndDay;
+            }
+            
+            tasks.push({
+                ...task,
+                actualDuration: taskDuration,
+                startDay: taskStartDay,
+                endDay: taskEndDay
+            });
+        });
         
-        totalWorkingDays += stepDuration || 0;
+        // 处理并行任务组对currentDay的影响
+        Object.values(parallelGroups).forEach(group => {
+            currentDay = Math.max(currentDay, group.startDay + group.maxDuration);
+        });
         
-        steps.push({
-            ...step,
-            actualDuration: stepDuration,
-            startDay: totalWorkingDays - (stepDuration || 0),
-            endDay: totalWorkingDays
+        phaseDuration = currentDay - phaseStartDay;
+        
+        phases.push({
+            ...phase,
+            actualDuration: phaseDuration,
+            startDay: phaseStartDay,
+            endDay: currentDay,
+            tasks
         });
     });
     
-    // 添加额外服务相关的流程步骤
+    totalWorkingDays = currentDay;
+    
+    // 添加额外服务相关的流程阶段
     if (formData.services && Array.isArray(formData.services)) {
         const services = formData.services.map(s => typeof s === 'string' ? s : s.type);
         
         // 银行开户服务
         if (services.includes('bank')) {
-            const bankStep = {
-                step: steps.length + 1,
+            const bankPhase = {
+                phase: phases.length + 1,
                 name: 'Bank Account Opening Assistance (银行开户协助)',
                 description: 'Assist with preparing documents and coordinating with banks for account opening (协助准备材料并对接银行开户)',
                 actualDuration: 7,
                 startDay: totalWorkingDays,
                 endDay: totalWorkingDays + 7,
-                documents: ['Company Registration Certificate (公司注册证书)', 'Business License (营业执照)', 'Director ID Documents (董事身份文件)', 'Proof of Address (地址证明)'],
-                requirements: ['Director may need to be present in person (董事可能需要亲自到场)', 'Prepare initial deposit (准备首笔存款)'],
-                risks: ['Bank review time varies (银行审核时间不定)', 'May require multiple visits (可能需要多次往返)'],
-                deliverables: ['Bank Account (银行账户)', 'Online Banking (网银)', 'Debit Card (银行卡)']
+                tasks: [
+                    {
+                        taskId: 'EXTRA-BANK-T1',
+                        name: 'Bank Account Opening (银行开户)',
+                        description: 'Assist with opening bank account (协助开设银行账户)',
+                        duration: 7,
+                        actualDuration: 7,
+                        startDay: totalWorkingDays,
+                        endDay: totalWorkingDays + 7,
+                        parallel: false,
+                        parallelGroup: null,
+                        responsible: 'Service Provider (服务商) + Bank (银行)',
+                        documents: ['Company Registration Certificate (公司注册证书)', 'Business License (营业执照)', 'Director ID Documents (董事身份文件)', 'Proof of Address (地址证明)'],
+                        requirements: ['Director may need to be present in person (董事可能需要亲自到场)', 'Prepare initial deposit (准备首笔存款)'],
+                        risks: ['Bank review time varies (银行审核时间不定)', 'May require multiple visits (可能需要多次往返)'],
+                        deliverables: ['Bank Account (银行账户)', 'Online Banking (网银)', 'Debit Card (银行卡)']
+                    }
+                ]
             };
-            steps.push(bankStep);
+            phases.push(bankPhase);
             totalWorkingDays += 7;
         }
         
         // 税务咨询服务（并行，不增加总时长）
         if (services.includes('tax')) {
-            const taxStep = {
-                step: steps.length + 1,
+            const taxPhase = {
+                phase: phases.length + 1,
                 name: 'Tax Consultation (税务咨询)',
                 description: 'Professional tax planning and compliance consultation (专业税务筹划和合规咨询)',
                 actualDuration: 0,
                 startDay: totalWorkingDays - 3,
                 endDay: totalWorkingDays,
-                documents: ['Business Scope (业务范围)', 'Expected Revenue (预期营收)'],
-                requirements: [],
-                risks: [],
-                deliverables: ['Tax Planning Report (税务筹划方案)', 'Compliance Guidance (合规指引)']
+                tasks: [
+                    {
+                        taskId: 'EXTRA-TAX-T1',
+                        name: 'Tax Consultation (税务咨询)',
+                        description: 'Tax planning and consultation (税务筹划与咨询)',
+                        duration: 0,
+                        actualDuration: 0,
+                        startDay: totalWorkingDays - 3,
+                        endDay: totalWorkingDays,
+                        parallel: true,
+                        parallelGroup: 'EXTRA',
+                        responsible: 'Tax Consultant (税务顾问)',
+                        documents: ['Business Scope (业务范围)', 'Expected Revenue (预期营收)'],
+                        requirements: [],
+                        risks: [],
+                        deliverables: ['Tax Planning Report (税务筹划方案)', 'Compliance Guidance (合规指引)']
+                    }
+                ]
             };
-            steps.push(taxStep);
+            phases.push(taxPhase);
         }
         
         // 公司秘书服务（并行，不增加总时长）
         if (services.includes('secretary')) {
-            const secretaryStep = {
-                step: steps.length + 1,
+            const secretaryPhase = {
+                phase: phases.length + 1,
                 name: 'Company Secretary Service (公司秘书服务)',
                 description: 'Annual compliance and secretarial services (年度合规和秘书服务)',
                 actualDuration: 0,
                 startDay: totalWorkingDays,
                 endDay: totalWorkingDays,
-                documents: [],
-                requirements: [],
-                risks: [],
-                deliverables: ['Annual Compliance Service (年度合规服务)', 'Document Filing (文件归档)', 'Registered Address (注册地址)']
+                tasks: [
+                    {
+                        taskId: 'EXTRA-SEC-T1',
+                        name: 'Company Secretary Service (公司秘书服务)',
+                        description: 'Ongoing secretarial support (持续秘书服务)',
+                        duration: 0,
+                        actualDuration: 0,
+                        startDay: totalWorkingDays,
+                        endDay: totalWorkingDays,
+                        parallel: true,
+                        parallelGroup: 'EXTRA',
+                        responsible: 'Company Secretary (公司秘书)',
+                        documents: [],
+                        requirements: [],
+                        risks: [],
+                        deliverables: ['Annual Compliance Service (年度合规服务)', 'Document Filing (文件归档)', 'Registered Address (注册地址)']
+                    }
+                ]
             };
-            steps.push(secretaryStep);
+            phases.push(secretaryPhase);
         }
     }
     
     return {
         totalWorkingDays,
         totalCalendarDays: calculateCalendarDays(totalWorkingDays, jurisdiction),
-        steps,
+        phases,
         expressDeliveryDays
     };
 }
@@ -290,7 +396,7 @@ function matchSuppliers(jurisdiction, formData = {}) {
     return filtered.slice(0, 3);
 }
 
-// 生成流程时间线数据（基于用户表单数据动态评估）
+// 生成流程时间线数据(基于用户表单数据动态评估)
 function generateTimeline(jurisdiction, supplierId, deliveryInfo, formData = {}) {
     const duration = calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData);
     const jurisdictionInfo = JURISDICTIONS[jurisdiction];
@@ -304,7 +410,7 @@ function generateTimeline(jurisdiction, supplierId, deliveryInfo, formData = {})
         risks.push({
             level: 'warning',
             title: 'Multiple Shareholders (多股东提示)',
-            content: `You have ${formData.shareholders.length} shareholders, which may require additional time for document preparation and notarization (您有${formData.shareholders.length}位股东，文件准备和公证可能需要额外时间)`
+            content: `You have ${formData.shareholders.length} shareholders, which may require additional time for document preparation and notarization (您有${formData.shareholders.length}位股东,文件准备和公证可能需要额外时间)`
         });
     }
     
@@ -312,7 +418,7 @@ function generateTimeline(jurisdiction, supplierId, deliveryInfo, formData = {})
         risks.push({
             level: 'info',
             title: 'Multiple Directors (多董事说明)',
-            content: `You have ${formData.directors.length} directors, please ensure all directors' documents are complete (您有${formData.directors.length}位董事，请确保所有董事的文件齐全)`
+            content: `You have ${formData.directors.length} directors, please ensure all directors' documents are complete (您有${formData.directors.length}位董事,请确保所有董事的文件齐全)`
         });
     }
     
@@ -324,7 +430,7 @@ function generateTimeline(jurisdiction, supplierId, deliveryInfo, formData = {})
             risks.push({
                 level: 'info',
                 title: 'Bank Account Opening (银行开户说明)',
-                content: 'Bank account opening usually requires 1-2 weeks after company registration, and may require in-person visit (银行开户通常需要在公司注册完成后1-2周，可能需要本人到场)'
+                content: 'Bank account opening usually requires 1-2 weeks after company registration, and may require in-person visit (银行开户通常需要在公司注册完成后1-2周,可能需要本人到场)'
             });
         }
         
@@ -332,7 +438,7 @@ function generateTimeline(jurisdiction, supplierId, deliveryInfo, formData = {})
             risks.push({
                 level: 'warning',
                 title: 'Trademark Registration (商标注册周期)',
-                content: 'Trademark registration is a separate process, typically taking 6-12 months, and does not affect company registration timeline (商标注册是独立流程，通常需要6-12个月，不影响公司注册时效)'
+                content: 'Trademark registration is a separate process, typically taking 6-12 months, and does not affect company registration timeline (商标注册是独立流程,通常需要6-12个月,不影响公司注册时效)'
             });
         }
     }
@@ -341,7 +447,7 @@ function generateTimeline(jurisdiction, supplierId, deliveryInfo, formData = {})
         jurisdiction: jurisdictionInfo,
         totalWorkingDays: duration.totalWorkingDays,
         totalCalendarDays: duration.totalCalendarDays,
-        steps: duration.steps,
+        phases: duration.phases,  // 返回阶段数据而不是steps
         risks,
         supplier: SUPPLIERS.find(s => s.id === supplierId)
     };

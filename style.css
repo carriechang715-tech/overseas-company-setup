@@ -1095,3 +1095,309 @@ textarea {
     color: var(--primary-color);
     font-weight: 600;
 }
+
+/* ==========================================
+   阶段化流程样式 (Phase-based Timeline)
+   ========================================== */
+
+/* 阶段容器 */
+.timeline-phases {
+    margin-top: var(--spacing-xl);
+}
+
+/* 单个阶段 */
+.timeline-phase {
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    transition: all var(--transition-base);
+}
+
+.timeline-phase:hover {
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+/* 阶段头部 */
+.phase-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.phase-number {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.phase-name {
+    flex: 1;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.phase-duration {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--primary-color);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.875rem;
+    box-shadow: var(--shadow-sm);
+}
+
+/* 阶段描述 */
+.phase-description {
+    padding: var(--spacing-md) var(--spacing-xl);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* 任务列表 */
+.phase-tasks {
+    padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* 单个任务 */
+.task-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    transition: all var(--transition-base);
+}
+
+.task-item:hover {
+    background: white;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.task-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 并行任务标识 */
+.parallel-indicator {
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    display: inline-block;
+}
+
+.parallel-task {
+    border-left: 4px solid #10b981;
+}
+
+.sequential-task {
+    border-left: 4px solid var(--primary-color);
+}
+
+/* 任务头部 */
+.task-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.task-number {
+    background: var(--primary-color);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+}
+
+.task-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.task-duration,
+.task-timeline,
+.task-responsible {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+/* 任务描述 */
+.task-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+}
+
+/* 任务详情区域 */
+.task-documents,
+.task-requirements,
+.task-risks,
+.task-deliverables {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+}
+
+.task-documents {
+    background: #eff6ff;
+    border-left: 3px solid #3b82f6;
+}
+
+.task-requirements {
+    background: #f0fdf4;
+    border-left: 3px solid #10b981;
+}
+
+.task-risks {
+    background: #fef3c7;
+    border-left: 3px solid #f59e0b;
+}
+
+.task-deliverables {
+    background: #f5f3ff;
+    border-left: 3px solid #8b5cf6;
+}
+
+.task-documents strong,
+.task-requirements strong,
+.task-risks strong,
+.task-deliverables strong {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+}
+
+.task-documents ul,
+.task-requirements ul,
+.task-risks ul {
+    margin: var(--spacing-xs) 0 0 var(--spacing-lg);
+    padding: 0;
+}
+
+.task-documents li,
+.task-requirements li,
+.task-risks li {
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.5;
+}
+
+.deliverable {
+    display: inline-block;
+    background: white;
+    border: 1px solid #8b5cf6;
+    color: #8b5cf6;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    margin-right: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+/* 快递信息 */
+.express-info {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: #ecfdf5;
+    border-left: 3px solid #10b981;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+}
+
+.express-info strong {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    color: #059669;
+    font-weight: 600;
+}
+
+.express-info span {
+    display: inline-block;
+    margin-right: var(--spacing-md);
+}
+
+.express-duration {
+    color: #059669;
+    font-weight: 600;
+}
+
+/* 阶段总结 */
+.phase-summary {
+    background: var(--bg-secondary);
+    border-top: 2px solid var(--border-color);
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.phase-summary strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .phase-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-sm);
+    }
+    
+    .phase-name {
+        font-size: 1.25rem;
+    }
+    
+    .task-header {
+        flex-direction: column;
+    }
+    
+    .task-meta {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+}
