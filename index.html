@@ -15,24 +15,25 @@
             <div class="header-notice">
                 💡 This platform is primarily for <strong>Timeline and Cost Estimation (评估时效和费用)</strong>, shareholder and director information is optional (股东和董事信息为可选填写)
             </div>
-        </header>
-
-        <main class="app-main">
+            
             <!-- 步骤指示器 -->
             <div class="step-indicator">
-                <div class="step active" data-step="1">
+                <div class="step active" data-step="1" onclick="goToStep(1)">
                     <div class="step-number">1</div>
                     <div class="step-label">Requirements (填写需求)</div>
                 </div>
-                <div class="step" data-step="2">
+                <div class="step" data-step="2" onclick="goToStep(2)">
                     <div class="step-number">2</div>
                     <div class="step-label">Select Supplier (选择供应商)</div>
                 </div>
-                <div class="step" data-step="3">
+                <div class="step" data-step="3" onclick="goToStep(3)">
                     <div class="step-number">3</div>
                     <div class="step-label">Process Details (流程详情)</div>
                 </div>
             </div>
+        </header>
+
+        <main class="app-main">
 
             <!-- 第一步：需求表单 -->
             <div class="step-content" id="step1" style="display: block;">
@@ -250,7 +251,13 @@
 
                         <!-- 额外服务 -->
                         <div class="form-section">
-                            <h3>📦 Additional Service Requirements (额外服务需求)</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                                <h3 style="margin: 0;">📦 Additional Service Requirements (额外服务需求)</h3>
+                                <label style="cursor: pointer; font-weight: 500; color: var(--primary-color);">
+                                    <input type="checkbox" id="selectAllServices" onclick="toggleAllServices(this)" style="margin-right: 5px;">
+                                    Select All (全选)
+                                </label>
+                            </div>
                             <div class="checkbox-group">
                                 <label><input type="checkbox" name="services[]" value="secretary"> Company Secretary Service (公司秘书服务)</label>
                                 <label><input type="checkbox" name="services[]" value="bank"> Bank Account Opening Assistance (银行开户协助)</label>

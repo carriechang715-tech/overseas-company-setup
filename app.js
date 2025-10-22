@@ -68,11 +68,8 @@ function handleJurisdictionChange(jurisdictionCode) {
             const option = document.createElement('option');
             option.value = code;
             
-            // 构建选项文本
+            // 构建选项文本（不包含天数）
             let text = region.name;
-            if (region.days) {
-                text += ` - ${region.days} days (天)`;
-            }
             if (region.tax) {
                 text += ` (Tax Rate (税率): ${region.tax})`;
             }
@@ -108,6 +105,22 @@ function setupOtherServiceToggle() {
             }
         });
     }
+}
+
+// 全选/取消全选服务
+function toggleAllServices(selectAllCheckbox) {
+    const serviceCheckboxes = document.querySelectorAll('[name="services[]"]');
+    serviceCheckboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+        
+        // 如果全选包含"其他"，则显示输入框
+        if (checkbox.id === 'otherServiceCheckbox' && checkbox.checked) {
+            document.getElementById('otherServiceGroup').style.display = 'block';
+        } else if (checkbox.id === 'otherServiceCheckbox' && !checkbox.checked) {
+            document.getElementById('otherServiceGroup').style.display = 'none';
+            document.getElementById('otherServiceInput').value = '';
+        }
+    });
 }
 
 // 设置事件监听
@@ -204,9 +217,9 @@ function collectServices() {
     return services;
 }
 
-// 显示供应商列表
+// 显示供应商列表（基于用户需求智能匹配）
 function showSuppliers() {
-    const suppliers = matchSuppliers(formData.jurisdiction);
+    const suppliers = matchSuppliers(formData.jurisdiction, formData);
     const container = document.querySelector('.suppliers-container');
     
     const jurisdictionInfo = JURISDICTIONS[formData.jurisdiction];
@@ -214,7 +227,15 @@ function showSuppliers() {
     let html = `
         <div class="suppliers-header">
             <h2>🏆 Recommended Suppliers (推荐供应商) - ${jurisdictionInfo.flag} ${jurisdictionInfo.name}</h2>
-            <p>We have matched <strong>${suppliers.length}</strong> professional service providers for you (已为您匹配 <strong>${suppliers.length}</strong> 家专业服务商)</p>
+            <p>We have matched <strong>${suppliers.length}</strong> professional service providers for you based on your requirements (根据您的需求，已为您匹配 <strong>${suppliers.length}</strong> 家专业服务商)</p>
+            
+            <!-- 匹配说明 -->
+            ${formData.services && formData.services.length > 0 ? `
+                <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 12px; margin-top: 15px; border-radius: 6px; font-size: 14px;">
+                    <strong style="color: #059669;">✨ Smart Matching (智能匹配):</strong> 
+                    Based on your selected additional services, we prioritize suppliers with relevant expertise (根据您选择的额外服务，优先推荐有相关专长的供应商)
+                </div>
+            ` : ''}
         </div>
     `;
     
@@ -283,7 +304,7 @@ function selectSupplier(supplierId) {
     goToStep(3);
 }
 
-// 显示流程时间线
+// 显示流程时间线（基于表单数据动态评估）
 function showTimeline() {
     const timeline = generateTimeline(
         formData.jurisdiction,
@@ -291,7 +312,8 @@ function showTimeline() {
         { 
             toCountry: formData.deliveryCountry, 
             subRegion: formData.subRegion 
-        }
+        },
+        formData  // 传递完整的表单数据
     );
     
     const container = document.querySelector('.timeline-container');
@@ -308,6 +330,25 @@ function showTimeline() {
     let html = `
         <div class="timeline-header">
             <h2>📅 Setup Process Timeline (设立流程时间线) - ${jurisdictionDisplay}</h2>
+            
+            <!-- 基于用户输入的评估说明 -->
+            <div class="assessment-info" style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+                <h4 style="margin-top: 0; color: #0369a1;">📈 Assessment Based on Your Information (基于您的信息评估)</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 14px;">
+                    ${formData.companyName ? `<div><strong>Company Name (公司名称):</strong> ${formData.companyName}</div>` : ''}
+                    ${formData.companyType ? `<div><strong>Company Type (公司类型):</strong> ${formData.companyType}</div>` : ''}
+                    ${formData.shareholders && formData.shareholders.length > 0 ? `<div><strong>Shareholders (股东):</strong> ${formData.shareholders.length} person(s) (位)</div>` : '<div><strong>Shareholders (股东):</strong> Not specified (未填写)</div>'}
+                    ${formData.directors && formData.directors.length > 0 ? `<div><strong>Directors (董事):</strong> ${formData.directors.length} person(s) (位)</div>` : '<div><strong>Directors (董事):</strong> Not specified (未填写)</div>'}
+                    ${formData.services && formData.services.length > 0 ? `<div><strong>Additional Services (额外服务):</strong> ${formData.services.length} service(s) (项)</div>` : '<div><strong>Additional Services (额外服务):</strong> None (无)</div>'}
+                    ${formData.deliveryCountry ? `<div><strong>Delivery to (邮寄到):</strong> ${formData.deliveryCountry}</div>` : ''}
+                </div>
+                <p style="margin-bottom: 0; margin-top: 10px; color: #0369a1; font-size: 13px;">
+                    👉 The timeline below is dynamically calculated based on your selections. Different regions, number of shareholders/directors, and additional services will affect the total time required.
+                    <br>
+                    👉 以下时间线是根据您的选择动态计算的，不同地区、股东/董事数量、额外服务都会影响总时长。
+                </p>
+            </div>
+            
             <div class="timeline-summary">
                 <div class="summary-item">
                     <span class="label">Total Working Days (总工作日)</span>
