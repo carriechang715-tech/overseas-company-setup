@@ -140,6 +140,11 @@ function calculateTotalDuration(jurisdiction, supplierId, deliveryInfo, formData
                 }
             }
             
+            // 确保任务时间至少为1天（除非是并行任务或特殊标记的任务）
+            if (taskDuration !== null && taskDuration !== undefined) {
+                taskDuration = Math.max(taskDuration, 1);
+            }
+            
             // 计算任务的起止时间
             let taskStartDay, taskEndDay;
             
@@ -348,7 +353,7 @@ function calculateExpressDelivery(fromCountry, toCountry, weight) {
     console.log(`使用默认快递时间: ${fromCountry} -> ${toCountry} = ${defaultDays}天`);
     
     return {
-        days: defaultDays,
+        days: Math.max(defaultDays, 1),
         price: 0,
         company: 'Estimated (预估)',
         time: `${defaultDays}天`
@@ -367,12 +372,14 @@ function parseExpressTime(timeStr) {
     if (match) {
         const min = parseInt(match[1]);
         const max = parseInt(match[2]);
-        return Math.ceil((min + max) / 2);  // 取平均值并向上取整
+        // 确保至少返回1天
+        return Math.max(Math.ceil((min + max) / 2), 1);  // 取平均值并向上取整，至少为1天
     }
     
     const singleMatch = timeStr.match(/(\d+)天/);
     if (singleMatch) {
-        return parseInt(singleMatch[1]);
+        // 确保至少返回1天
+        return Math.max(parseInt(singleMatch[1]), 1);
     }
     
     // 默认至少返回1天
