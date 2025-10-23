@@ -72,6 +72,12 @@ const JURISDICTIONS = {
         description: '亚洲第二大经济体，技术先进',
         advantages: ['市场成熟', '技术领先', '法律完善', '信誉度高'],
         avgSetupDays: 14,
+        companyTypes: [
+            { value: 'KK', label: 'Kabushiki Kaisha - 株式会社 (Stock Company)', popular: true },
+            { value: 'GK', label: 'Godo Kaisha - 合同会社 (Limited Liability Company)', popular: true },
+            { value: 'YK', label: 'Yugen Kaisha - 有限会社 (Limited Company, discontinued)', popular: false },
+            { value: 'Branch', label: 'Branch Office (支店)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'TOKYO': { name: '东京 (Tokyo)', days: 14, popular: true, description: '首都，经济中心' },
@@ -94,6 +100,12 @@ const JURISDICTIONS = {
         description: '高科技产业发达，韩流文化影响力大',
         advantages: ['创新能力强', '电子商务发达', '文化产业', 'FTA覆盖广'],
         avgSetupDays: 10,
+        companyTypes: [
+            { value: 'Chusik', label: 'Chusik Hoesa - 주식회사 (Stock Company)', popular: true },
+            { value: 'Yuhan', label: 'Yuhan Hoesa - 유한회사 (Limited Liability Company)', popular: true },
+            { value: 'Branch', label: 'Branch Office (지점)', popular: false },
+            { value: 'RepOffice', label: 'Representative Office (연락사무소)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'SEOUL': { name: '首尔 (Seoul)', days: 10, popular: true, description: '首都，经济中心' },
@@ -116,6 +128,12 @@ const JURISDICTIONS = {
         description: '东南亚新兴市场，华人众多',
         advantages: ['成本较低', '语言便利', '地理位置好', '政策优惠'],
         avgSetupDays: 12,
+        companyTypes: [
+            { value: 'SdnBhd', label: 'Sendirian Berhad (Private Limited) - Sdn Bhd', popular: true },
+            { value: 'Berhad', label: 'Berhad (Public Limited)', popular: false },
+            { value: 'LLP', label: 'Limited Liability Partnership (LLP)', popular: false },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'KL': { name: '吉隆坡 (Kuala Lumpur)', days: 12, popular: true, description: '首都，金融中心' },
@@ -138,6 +156,12 @@ const JURISDICTIONS = {
         description: '东南亚制造业中心，旅游业发达',
         advantages: ['劳动力成本低', '旅游市场大', '制造业基础好', 'BOI优惠政策'],
         avgSetupDays: 15,
+        companyTypes: [
+            { value: 'Limited', label: 'Limited Company (有限公司) - Co. Ltd', popular: true },
+            { value: 'PublicLtd', label: 'Public Limited Company (公众有限公司) - PLC', popular: false },
+            { value: 'Partnership', label: 'Partnership (合伙企业)', popular: false },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'BKK': { name: '曼谷 (Bangkok)', days: 15, popular: true, description: '首都，经济中心' },
@@ -160,6 +184,12 @@ const JURISDICTIONS = {
         description: '东南亚新兴制造基地，经济增长快',
         advantages: ['人口红利', '制造业转移', '成本优势', '政策开放'],
         avgSetupDays: 18,
+        companyTypes: [
+            { value: 'LLC', label: 'Limited Liability Company (有限责任公司) - LLC', popular: true },
+            { value: 'JSC', label: 'Joint Stock Company (股份公司) - JSC', popular: true },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false },
+            { value: 'RepOffice', label: 'Representative Office (代表处)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'HCM': { name: '胡志明市 (Ho Chi Minh)', days: 18, popular: true, description: '经济中心，最大城市' },
@@ -182,6 +212,13 @@ const JURISDICTIONS = {
         description: '全球第五大经济体，人口市场巨大',
         advantages: ['市场潜力大', 'IT产业发达', '人力资源丰富', '英语普及'],
         avgSetupDays: 20,
+        companyTypes: [
+            { value: 'PrivateLtd', label: 'Private Limited Company (私人有限公司) - Pvt Ltd', popular: true },
+            { value: 'PublicLtd', label: 'Public Limited Company (公众有限公司) - Ltd', popular: true },
+            { value: 'LLP', label: 'Limited Liability Partnership (LLP)', popular: false },
+            { value: 'OPC', label: 'One Person Company (一人公司) - OPC', popular: false },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'MUM': { name: '孟买 (Mumbai)', days: 20, popular: true, description: '金融中心，最大城市' },
@@ -204,6 +241,12 @@ const JURISDICTIONS = {
         description: '东南亚最大经济体，人口第四',
         advantages: ['人口众多', '资源丰富', '市场潜力', '战略位置'],
         avgSetupDays: 21,
+        companyTypes: [
+            { value: 'PT', label: 'Perseroan Terbatas - PT (Limited Liability Company)', popular: true },
+            { value: 'PTPMA', label: 'PT PMA (Foreign Investment Company)', popular: true },
+            { value: 'CV', label: 'Commanditaire Vennootschap - CV (Limited Partnership)', popular: false },
+            { value: 'Branch', label: 'Branch Office (Kantor Cabang)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'JKT': { name: '雅加达 (Jakarta)', days: 21, popular: true, description: '首都，经济中心' },
@@ -226,6 +269,12 @@ const JURISDICTIONS = {
         description: '英语国家，BPO产业发达',
         advantages: ['英语熟练', '劳动力充足', '成本低', '美国关系'],
         avgSetupDays: 16,
+        companyTypes: [
+            { value: 'Corp', label: 'Stock Corporation (股份有限公司)', popular: true },
+            { value: 'LLC', label: 'One Person Corporation (一人公司) - OPC', popular: true },
+            { value: 'Partnership', label: 'Partnership (合伙企业)', popular: false },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'MNL': { name: '马尼拉 (Manila)', days: 16, popular: true, description: '首都，经济中心' },
@@ -248,6 +297,11 @@ const JURISDICTIONS = {
         description: '高科技产业发达，半导体全球领先',
         advantages: ['科技优势', '制造业强', '地理位置', '文化相近'],
         avgSetupDays: 10,
+        companyTypes: [
+            { value: 'Limited', label: 'Company Limited by Shares (有限公司)', popular: true },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false },
+            { value: 'RepOffice', label: 'Representative Office (代表处)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'TPE': { name: '台北 (Taipei)', days: 10, popular: true, description: '首都，金融中心' },
@@ -270,6 +324,12 @@ const JURISDICTIONS = {
         description: '中东金融和贸易中心，迪拜自贸区',
         advantages: ['零税收（自贸区）', '战略位置', '基础设施好', '国际化程度高'],
         avgSetupDays: 8,
+        companyTypes: [
+            { value: 'FZE', label: 'Free Zone Establishment (自贸区企业) - FZE', popular: true },
+            { value: 'FZCO', label: 'Free Zone Company (自贸区公司) - FZCO', popular: true },
+            { value: 'LLC', label: 'Limited Liability Company - LLC', popular: true },
+            { value: 'Branch', label: 'Branch Office (分公司)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'DXB': { name: '迪拜 (Dubai)', days: 8, popular: true, description: '金融中心，自贸区' },
@@ -322,6 +382,12 @@ const JURISDICTIONS = {
         description: '欧洲经济引擎，工业强国',
         advantages: ['欧盟市场', '工业发达', '技术先进', '信誉度高'],
         avgSetupDays: 14,
+        companyTypes: [
+            { value: 'GmbH', label: 'Gesellschaft mit beschränkter Haftung - GmbH (有限责任公司)', popular: true },
+            { value: 'UG', label: 'Unternehmergesellschaft - UG (创业公司)', popular: true },
+            { value: 'AG', label: 'Aktiengesellschaft - AG (股份公司)', popular: false },
+            { value: 'Branch', label: 'Branch Office (Zweigniederlassung)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'BER': { name: '柏林 (Berlin)', days: 14, popular: true, description: '首都，创业中心' },
@@ -344,6 +410,12 @@ const JURISDICTIONS = {
         description: '欧洲第二大经济体，奢侈品之都',
         advantages: ['欧盟核心', '消费市场大', '品牌影响力', '创新能力'],
         avgSetupDays: 12,
+        companyTypes: [
+            { value: 'SARL', label: 'Société à Responsabilité Limitée - SARL (有限责任公司)', popular: true },
+            { value: 'SAS', label: 'Société par Actions Simplifiée - SAS (简化股份公司)', popular: true },
+            { value: 'SA', label: 'Société Anonyme - SA (匿名股份公司)', popular: false },
+            { value: 'Branch', label: 'Branch Office (Succursale)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'PAR': { name: '巴黎 (Paris)', days: 12, popular: true, description: '首都，时尚之都' },
@@ -366,6 +438,11 @@ const JURISDICTIONS = {
         description: '欧洲低税天堂，科技公司首选',
         advantages: ['低税率', '欧盟成员', '英语国家', '科技友好'],
         avgSetupDays: 8,
+        companyTypes: [
+            { value: 'Limited', label: 'Private Company Limited by Shares - Ltd', popular: true },
+            { value: 'DAC', label: 'Designated Activity Company - DAC', popular: false },
+            { value: 'Branch', label: 'Branch Office', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'DUB': { name: '都柏林 (Dublin)', days: 8, popular: true, description: '首都，科技中心' },
@@ -387,6 +464,11 @@ const JURISDICTIONS = {
         description: '欧洲门户，物流中心',
         advantages: ['地理位置优', '物流发达', '税务优惠', '英语普及'],
         avgSetupDays: 10,
+        companyTypes: [
+            { value: 'BV', label: 'Besloten Vennootschap - BV (私人有限公司)', popular: true },
+            { value: 'NV', label: 'Naamloze Vennootschap - NV (公众有限公司)', popular: false },
+            { value: 'Branch', label: 'Branch Office (Filiaal)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'AMS': { name: '阿姆斯特丹 (Amsterdam)', days: 10, popular: true, description: '首都，金融中心' },
@@ -408,6 +490,11 @@ const JURISDICTIONS = {
         description: '全球金融中心，隐私保护严格',
         advantages: ['政治稳定', '银行保密', '低税率', '生活质量高'],
         avgSetupDays: 15,
+        companyTypes: [
+            { value: 'GmbH', label: 'Gesellschaft mit beschränkter Haftung - GmbH', popular: true },
+            { value: 'AG', label: 'Aktiengesellschaft - AG (股份公司)', popular: true },
+            { value: 'Branch', label: 'Branch Office (Zweigniederlassung)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'ZRH': { name: '苏黎世 (Zurich)', days: 15, popular: true, description: '金融中心，最大城市' },
@@ -429,7 +516,12 @@ const JURISDICTIONS = {
         minCapital: 'EUR 12,000',
         description: '欧洲金融中心，基金天堂',
         advantages: ['金融专业', '税务优惠', '欧盟核心', '基金注册'],
-        avgSetupDays: 12
+        avgSetupDays: 12,
+        companyTypes: [
+            { value: 'SARL', label: 'Société à Responsabilité Limitée - Sàrl (有限责任公司)', popular: true },
+            { value: 'SA', label: 'Société Anonyme - SA (股份公司)', popular: true },
+            { value: 'SOPARFI', label: 'Holding Company (控股公司) - SOPARFI', popular: false }
+        ]
     },
     'MT': {
         name: '马耳他',
@@ -444,7 +536,12 @@ const JURISDICTIONS = {
         minCapital: 'EUR 1,165',
         description: '欧洲离岸中心，税务优惠',
         advantages: ['欧盟成员', '英语国家', '税务返还', '博彩牌照'],
-        avgSetupDays: 14
+        avgSetupDays: 14,
+        companyTypes: [
+            { value: 'Limited', label: 'Private Limited Company - Ltd', popular: true },
+            { value: 'PLC', label: 'Public Limited Company - PLC', popular: false },
+            { value: 'Branch', label: 'Branch Office', popular: false }
+        ]
     },
     'CY': {
         name: '塞浦路斯',
@@ -459,7 +556,12 @@ const JURISDICTIONS = {
         minCapital: 'EUR 1',
         description: '欧洲低税中心，俄罗斯门户',
         advantages: ['低税率', '欧盟成员', '英语普及', '双重税收协定'],
-        avgSetupDays: 10
+        avgSetupDays: 10,
+        companyTypes: [
+            { value: 'Limited', label: 'Private Limited Company - Ltd', popular: true },
+            { value: 'PublicLtd', label: 'Public Limited Company - PLC', popular: false },
+            { value: 'Branch', label: 'Branch Office', popular: false }
+        ]
     },
     'IT': {
         name: '意大利',
@@ -475,6 +577,11 @@ const JURISDICTIONS = {
         description: '欧洲第三大经济体，奢侈品产业',
         advantages: ['欧盟市场', '制造业强', '品牌效应', '文化影响'],
         avgSetupDays: 16,
+        companyTypes: [
+            { value: 'SRL', label: 'Società a Responsabilità Limitata - SRL (有限责任公司)', popular: true },
+            { value: 'SPA', label: 'Società per Azioni - SpA (股份公司)', popular: true },
+            { value: 'Branch', label: 'Branch Office (Succursale)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'ROM': { name: '罗马 (Rome)', days: 16, popular: true, description: '首都，文化之都' },
@@ -497,6 +604,11 @@ const JURISDICTIONS = {
         description: '欧洲第四大经济体，拉美门户',
         advantages: ['欧盟市场', '拉美联系', '旅游业发达', '语言优势'],
         avgSetupDays: 14,
+        companyTypes: [
+            { value: 'SL', label: 'Sociedad Limitada - SL (有限公司)', popular: true },
+            { value: 'SA', label: 'Sociedad Anónima - SA (股份公司)', popular: true },
+            { value: 'Branch', label: 'Branch Office (Sucursal)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'MAD': { name: '马德里 (Madrid)', days: 14, popular: true, description: '首都，经济中心' },
@@ -556,6 +668,12 @@ const JURISDICTIONS = {
         description: 'G7成员，生活质量高',
         advantages: ['政治稳定', '资源丰富', '移民友好', '邻近美国'],
         avgSetupDays: 10,
+        companyTypes: [
+            { value: 'Inc', label: 'Corporation (Federal) - Inc', popular: true },
+            { value: 'Corp', label: 'Corporation (Provincial) - Corp', popular: true },
+            { value: 'ULC', label: 'Unlimited Liability Corporation - ULC', popular: false },
+            { value: 'Branch', label: 'Branch Office', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'ON': { name: '安大略省-多伦多 (Toronto, ON)', days: 10, popular: true, description: '最大城市，金融中心' },
@@ -578,6 +696,12 @@ const JURISDICTIONS = {
         description: '拉美第二大经济体，美国门户',
         advantages: ['USMCA成员', '制造业发达', '人口市场大', '成本优势'],
         avgSetupDays: 15,
+        companyTypes: [
+            { value: 'SA', label: 'Sociedad Anónima - SA (股份公司)', popular: true },
+            { value: 'SAPI', label: 'Sociedad Anónima Promotora de Inversión - SAPI', popular: false },
+            { value: 'SRL', label: 'Sociedad de Responsabilidad Limitada - SRL', popular: false },
+            { value: 'Branch', label: 'Branch Office (Sucursal)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'MEX': { name: '墨西哥城 (Mexico City)', days: 15, popular: true, description: '首都，经济中心' },
@@ -600,6 +724,11 @@ const JURISDICTIONS = {
         description: '拉美最大经济体，资源大国',
         advantages: ['市场潜力大', '资源丰富', '金砖国家', '区域影响力'],
         avgSetupDays: 25,
+        companyTypes: [
+            { value: 'Ltda', label: 'Sociedade Limitada - Ltda (有限公司)', popular: true },
+            { value: 'SA', label: 'Sociedade Anônima - SA (股份公司)', popular: true },
+            { value: 'Branch', label: 'Branch Office (Filial)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'SAO': { name: '圣保罗 (Sao Paulo)', days: 25, popular: true, description: '经济中心，最大城市' },
@@ -622,6 +751,12 @@ const JURISDICTIONS = {
         description: '拉美最稳定经济体，铜矿大国',
         advantages: ['政治稳定', '经济自由', 'FTA网络广', '营商环境好'],
         avgSetupDays: 20,
+        companyTypes: [
+            { value: 'SA', label: 'Sociedad Anónima - SA (股份公司)', popular: true },
+            { value: 'SpA', label: 'Sociedad por Acciones - SpA (简化股份公司)', popular: true },
+            { value: 'Ltda', label: 'Sociedad de Responsabilidad Limitada - Ltda', popular: false },
+            { value: 'Branch', label: 'Branch Office (Agencia)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'SCL': { name: '圣地亚哥 (Santiago)', days: 20, popular: true, description: '首都，经济中心' },
@@ -645,6 +780,11 @@ const JURISDICTIONS = {
         description: '亚太重要经济体，资源丰富',
         advantages: ['经济稳定', '法律健全', '资源丰富', '地理优势'],
         avgSetupDays: 10,
+        companyTypes: [
+            { value: 'PtyLtd', label: 'Proprietary Limited Company - Pty Ltd', popular: true },
+            { value: 'PublicLtd', label: 'Public Limited Company - Ltd', popular: false },
+            { value: 'Branch', label: 'Branch Office', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'NSW': { name: '新南威尔士州-悉尼 (Sydney, NSW)', days: 10, popular: true, description: '最大城市，金融中心' },
@@ -667,6 +807,11 @@ const JURISDICTIONS = {
         description: '营商环境全球第一，政治清廉',
         advantages: ['营商便利', '政治清廉', '生活质量高', '创新能力强'],
         avgSetupDays: 5,
+        companyTypes: [
+            { value: 'Limited', label: 'Limited Liability Company - Ltd', popular: true },
+            { value: 'LookThrough', label: 'Look-Through Company - LTC', popular: false },
+            { value: 'Branch', label: 'Overseas Company (Branch)', popular: false }
+        ],
         hasSubRegions: true,
         subRegions: {
             'AKL': { name: '奥克兰 (Auckland)', days: 5, popular: true, description: '最大城市，经济中心' },
@@ -728,7 +873,11 @@ const JURISDICTIONS = {
         minCapital: 'USD 1',
         description: '新兴离岸中心，成本低',
         advantages: ['零税率', '注册快速', '成本低', '保密性好'],
-        avgSetupDays: 2
+        avgSetupDays: 2,
+        companyTypes: [
+            { value: 'IBC', label: 'International Business Company - IBC', popular: true },
+            { value: 'CSL', label: 'Company Special License - CSL', popular: false }
+        ]
     },
     'Mauritius': {
         name: '毛里求斯',
@@ -743,7 +892,11 @@ const JURISDICTIONS = {
         minCapital: 'USD 1',
         description: '非洲离岸中心，印度门户',
         advantages: ['低税率', '双重税收协定多', '政治稳定', '印度投资首选'],
-        avgSetupDays: 7
+        avgSetupDays: 7,
+        companyTypes: [
+            { value: 'GBC1', label: 'Global Business Company Type 1 - GBC1', popular: true },
+            { value: 'GBC2', label: 'Global Business Company Type 2 - GBC2', popular: false }
+        ]
     },
     'Samoa': {
         name: '萨摩亚',
@@ -758,7 +911,11 @@ const JURISDICTIONS = {
         minCapital: 'USD 1',
         description: '太平洋离岸中心',
         advantages: ['零税率', '注册简便', '无需审计', '保密性强'],
-        avgSetupDays: 3
+        avgSetupDays: 3,
+        companyTypes: [
+            { value: 'IBC', label: 'International Business Company - IBC', popular: true },
+            { value: 'Trust', label: 'International Trust', popular: false }
+        ]
     },
     'Panama': {
         name: '巴拿马',
@@ -773,7 +930,11 @@ const JURISDICTIONS = {
         minCapital: 'USD 10,000',
         description: '拉美离岸中心，运河之国',
         advantages: ['属地税制', '美元流通', '银行保密', '船舶注册'],
-        avgSetupDays: 10
+        avgSetupDays: 10,
+        companyTypes: [
+            { value: 'SA', label: 'Sociedad Anónima - SA (股份公司)', popular: true },
+            { value: 'Foundation', label: 'Private Interest Foundation (私人利益基金会)', popular: false }
+        ]
     }
 };
 
