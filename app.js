@@ -475,9 +475,45 @@ function showSuppliers() {
                     <strong>Certifications (资质认证):</strong>
                     ${supplier.certifications.map(cert => `<span class="cert">${cert}</span>`).join(' | ')}
                 </div>
-                <div class="supplier-contact">
-                    <span>📞 ${supplier.contact.phone}</span>
-                    <span>📧 ${supplier.contact.email}</span>
+                
+                <!-- 推荐理由 -->
+                ${supplier.recommendReasons && supplier.recommendReasons.length > 0 ? `
+                    <div class="recommendation-reasons" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; padding: 14px; margin: 15px 0; color: white; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);">
+                        <h4 style="margin: 0 0 10px 0; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                            🎯 Why We Recommend (推荐理由)
+                        </h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.9;">
+                            ${supplier.recommendReasons.map(reason => `<li style="margin-bottom: 5px;">${reason}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+                
+                <!-- 服务项目 -->
+                ${supplier.services && supplier.services.length > 0 ? `
+                    <div class="supplier-services" style="margin: 12px 0;">
+                        <h4 style="font-size: 13px; color: #64748b; margin-bottom: 8px; font-weight: 600;">💼 Service Scope (服务范围):</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                            ${supplier.services.map(svc => `<span style="background: #f1f5f9; color: #475569; padding: 5px 12px; border-radius: 5px; font-size: 12px;">${svc}</span>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <div class="supplier-contact" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid #e2e8f0; margin-top: 12px;">
+                    <span style="color: #64748b; font-size: 14px;"><strong>📞</strong> ${supplier.contact.phone}</span>
+                    <span style="color: #64748b; font-size: 14px;"><strong>📧</strong> ${supplier.contact.email}</span>
+                    ${supplier.contact.website ? `
+                        <a href="${supplier.contact.website}" target="_blank" 
+                           style="display: inline-flex; align-items: center; gap: 6px; color: #0ea5e9; text-decoration: none; font-weight: 500; padding: 6px 14px; background: #f0f9ff; border-radius: 6px; transition: all 0.2s; font-size: 13px; border: 1px solid #bae6fd;"
+                           onmouseover="this.style.background='#e0f2fe'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 2px 4px rgba(14, 165, 233, 0.2)';"
+                           onmouseout="this.style.background='#f0f9ff'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                            🌐 Official Website (官方网站)
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
+                    ` : ''}
                 </div>
                 <button class="btn-select" onclick="selectSupplier('${supplier.id}')">
                     View Detailed Process (查看详细流程)

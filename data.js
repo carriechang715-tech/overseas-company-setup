@@ -943,53 +943,105 @@ const SUPPLIERS = [
     {
         id: 'supplier_a',
         name: '启航国际商务咨询',
+        englishName: 'Startup International Consulting',
         rating: 4.9,
         experience: 15,
         completedCases: 3500,
-        specialties: ['HK', 'SG', 'BVI', 'Cayman'],
+        specialties: ['HK', 'SG', 'BVI', 'Cayman', 'Seychelles', 'MY', 'TH'],
+        regions: ['亚洲', '离岸金融中心'],
         price: {
             'HK': { service: 3500, government: 1720, total: 5220 },
             'SG': { service: 4800, government: 315, total: 5115 },
             'BVI': { service: 6500, government: 750, total: 7250 },
-            'Cayman': { service: 8500, government: 1200, total: 9700 }
+            'Cayman': { service: 8500, government: 1200, total: 9700 },
+            'Seychelles': { service: 4500, government: 350, total: 4850 },
+            'MY': { service: 4200, government: 800, total: 5000 },
+            'TH': { service: 5000, government: 1200, total: 6200 }
         },
         advantages: ['经验丰富', '价格合理', '服务专业', '响应迅速'],
-        certifications: ['会计师事务所', 'ISO9001', '律师资质'],
-        contact: { phone: '+852-1234-5678', email: 'info@startup-intl.com' }
+        services: ['公司注册', '银行开户', '公司秘书', '财税顾问', '商标注册'],
+        certifications: ['会计师事务所', 'ISO9001', '律师资质', '特许秘书牌照'],
+        contact: { 
+            phone: '+852-1234-5678', 
+            email: 'info@startup-intl.com',
+            website: 'https://www.startup-international.com',
+            address: '香港中環皇后大道中15号置地广场中国银行大厦'
+        },
+        strengths: {
+            offshore: '离岸公司设立专家，尤其擅长BVI、开曼架构搭建',
+            bank: '与汇丰、渣打、花旗等主流银行有深度合作',
+            speed: '香港、新加坡公司注册可加急处理，3-5天完成',
+            compliance: '提供持续合规服务，年审、税务申报一站式'
+        }
     },
     {
         id: 'supplier_b',
         name: '环球企业服务',
+        englishName: 'Global Business Services',
         rating: 4.8,
         experience: 12,
         completedCases: 2800,
-        specialties: ['US', 'UK', 'DE', 'AU'],
+        specialties: ['US', 'UK', 'DE', 'AU', 'CA', 'FR', 'NL', 'IE'],
+        regions: ['美洲', '欧洲', '大洋洲'],
         price: {
             'US': { service: 5500, government: 500, total: 6000 },
             'UK': { service: 4200, government: 200, total: 4400 },
             'DE': { service: 6800, government: 1500, total: 8300 },
-            'AU': { service: 5800, government: 506, total: 6306 }
+            'AU': { service: 5800, government: 506, total: 6306 },
+            'CA': { service: 5200, government: 400, total: 5600 },
+            'FR': { service: 6500, government: 800, total: 7300 },
+            'NL': { service: 5800, government: 600, total: 6400 },
+            'IE': { service: 4800, government: 350, total: 5150 }
         },
         advantages: ['全球网络', '欧美优势', '律师团队', '一站式服务'],
-        certifications: ['律师事务所', '会计师资质', '商标代理'],
-        contact: { phone: '+1-888-123-4567', email: 'service@global-biz.com' }
+        services: ['公司注册', '法律顾问', '税务筹划', '商标专利', '移民服务'],
+        certifications: ['律师事务所', '会计师资质', '商标代理', 'CPA认证'],
+        contact: { 
+            phone: '+1-888-123-4567', 
+            email: 'service@global-biz.com',
+            website: 'https://www.globalbizservices.com',
+            address: '美国纽约曼哈顿第五大道59号环球大厦'
+        },
+        strengths: {
+            usa: '特拉华州、内华达州注册专家，LLC、C-Corp架构设计',
+            eu: '欧盟各国注册经验，熟悉VAT、GDPR等法规',
+            legal: '内部律师团队，提供合同审查、IP保护等服务',
+            immigration: '提供EB-5、英国创新签证等移民服务配套'
+        }
     },
     {
         id: 'supplier_c',
         name: '港通商务顾问',
+        englishName: 'HK Consulting Services',
         rating: 4.7,
         experience: 10,
         completedCases: 2200,
-        specialties: ['HK', 'SG', 'US', 'UK'],
+        specialties: ['HK', 'SG', 'US', 'UK', 'CN', 'JP', 'KR'],
+        regions: ['亚洲', '美洲', '欧洲'],
         price: {
             'HK': { service: 2980, government: 1720, total: 4700 },
             'SG': { service: 4200, government: 315, total: 4515 },
             'US': { service: 4800, government: 500, total: 5300 },
-            'UK': { service: 3800, government: 200, total: 4000 }
+            'UK': { service: 3800, government: 200, total: 4000 },
+            'CN': { service: 3500, government: 800, total: 4300 },
+            'JP': { service: 6500, government: 1800, total: 8300 },
+            'KR': { service: 5800, government: 1200, total: 7000 }
         },
         advantages: ['性价比高', '香港本地', '银行开户协助', '后续服务'],
-        certifications: ['特许秘书', '会计师', '信托牌照'],
-        contact: { phone: '+852-9876-5432', email: 'cs@hk-consulting.com' }
+        services: ['公司注册', '银行开户', '财税代理', '公司秘书', '年审服务'],
+        certifications: ['特许秘书', '会计师', '信托牌照', 'HKICPA成员'],
+        contact: { 
+            phone: '+852-9876-5432', 
+            email: 'cs@hk-consulting.com',
+            website: 'https://www.hkconsulting.com.hk',
+            address: '香港尖沙咨广东道100号港通大厦'
+        },
+        strengths: {
+            hongkong: '香港本地资深机构，与公司注册处关系密切',
+            bank: '专业银行开户服务，成功率90%+',
+            price: '价格透明，无隐藏收费，性价比高',
+            service: '提供3年免费公司秘书服务，后续支持完善'
+        }
     }
 ];
 

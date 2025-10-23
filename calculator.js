@@ -415,62 +415,132 @@ function matchSuppliers(jurisdiction, formData = {}) {
         supplier.specialties.includes(jurisdiction)
     ).map(supplier => {
         let matchScore = 0;
+        const reasons = [];  // 推荐理由列表
         
         // 基础匹配：有该地区专长
         matchScore += 30;
+        reasons.push(`专注于${JURISDICTIONS[jurisdiction]?.name || jurisdiction}公司注册，经验丰富`);
         
         // 服务匹配加分：如果用户选择了额外服务，优先推荐有相关优势的供应商
         if (formData.services && Array.isArray(formData.services)) {
             const services = formData.services.map(s => typeof s === 'string' ? s : s.type);
             
-            if (services.includes('bank') && supplier.advantages.some(adv => adv.includes('银行开户') || adv.includes('开户'))) {
-                matchScore += 10;
+            if (services.includes('bank')) {
+                if (supplier.advantages.some(adv => adv.includes('银行开户') || adv.includes('开户'))) {
+                    matchScore += 12;
+                    reasons.push('提供专业银行开户协助服务');
+                }
+                // 检查strengths中是否有银行相关优势
+                if (supplier.strengths?.bank) {
+                    matchScore += 8;
+                    reasons.push(supplier.strengths.bank);
+                }
             }
+            
             if (services.includes('tax') && supplier.advantages.some(adv => adv.includes('税务') || adv.includes('财税'))) {
                 matchScore += 10;
+                reasons.push('具备专业税务筹划和申报能力');
             }
+            
             if (services.includes('secretary') && supplier.advantages.some(adv => adv.includes('秘书') || adv.includes('合规'))) {
                 matchScore += 10;
+                reasons.push('提供公司秘书和持续合规服务');
             }
+            
             if (services.includes('trademark') && supplier.certifications.some(cert => cert.includes('商标'))) {
                 matchScore += 10;
+                reasons.push('有商标注册专业资质');
             }
+            
             if (services.includes('accounting') && supplier.advantages.some(adv => adv.includes('记账') || adv.includes('财务'))) {
                 matchScore += 10;
+                reasons.push('提供代理记账和财务管理服务');
             }
         }
         
-        // 地区匹配加分：优先推荐该地区经验丰富的供应商
-        if (supplier.id === 'supplier_a' && ['HK', 'SG', 'BVI', 'Cayman'].includes(jurisdiction)) {
-            matchScore += 15;
+        // 地区专长加分：根据供应商的strengths生成推荐理由
+        const jurisdictionInfo = JURISDICTIONS[jurisdiction];
+        const region = jurisdictionInfo?.region;
+        
+        if (supplier.regions && supplier.regions.includes(region)) {
+            matchScore += 12;
+            reasons.push(`专注于${region}地区业务`);
         }
-        if (supplier.id === 'supplier_b' && ['US', 'UK', 'DE', 'AU'].includes(jurisdiction)) {
+        
+        // 根据具体国家添加专业理由
+        if (jurisdiction === 'HK' && supplier.strengths?.hongkong) {
             matchScore += 15;
+            reasons.push(supplier.strengths.hongkong);
         }
-        if (supplier.id === 'supplier_c' && ['HK', 'SG', 'US', 'UK'].includes(jurisdiction)) {
-            matchScore += 10;
+        if (['BVI', 'Cayman', 'Seychelles'].includes(jurisdiction) && supplier.strengths?.offshore) {
+            matchScore += 15;
+            reasons.push(supplier.strengths.offshore);
+        }
+        if (jurisdiction === 'US' && supplier.strengths?.usa) {
+            matchScore += 15;
+            reasons.push(supplier.strengths.usa);
+        }
+        if (['UK', 'DE', 'FR', 'NL', 'IE'].includes(jurisdiction) && supplier.strengths?.eu) {
+            matchScore += 12;
+            reasons.push(supplier.strengths.eu);
         }
         
         // 复杂度加分：跨国股东/董事需要更专业的服务
-        if (formData.shareholders && formData.shareholders.length > 0 && formData.shareholders[0].nationality) {
-            const shareholderNationality = formData.shareholders[0].nationality;
-            if (shareholderNationality !== jurisdiction && shareholderNationality !== 'Unknown') {
-                // 优先推荐有国际业务经验的供应商
-                if (supplier.experience >= 10) {
-                    matchScore += 8;
-                }
+        let hasForeignParticipants = false;
+        if (formData.shareholders && formData.shareholders.length > 0) {
+            const shareholderNationalities = formData.shareholders[0].nationalities || [];
+            if (shareholderNationalities.some(nat => nat && nat !== jurisdiction && nat !== 'Unknown')) {
+                hasForeignParticipants = true;
             }
+        }
+        if (formData.directors && formData.directors.length > 0) {
+            const directorNationalities = formData.directors[0].nationalities || [];
+            if (directorNationalities.some(nat => nat && nat !== jurisdiction && nat !== 'Unknown')) {
+                hasForeignParticipants = true;
+            }
+        }
+        
+        if (hasForeignParticipants) {
+            if (supplier.experience >= 12) {
+                matchScore += 10;
+                reasons.push(`${supplier.experience}年跨国业务经验，熟悉国际股东文件处理`);
+            }
+        }
+        
+        // 价格优势
+        const priceInfo = supplier.price[jurisdiction];
+        if (priceInfo && priceInfo.total < 6000) {
+            matchScore += 8;
+            reasons.push(`价格具有竞争力，性价比高`);
+        }
+        
+        // 评分和案例数量加分
+        if (supplier.rating >= 4.8) {
+            matchScore += 5;
+            reasons.push(`客户满意度${supplier.rating}/5.0，服务质量保障`);
+        }
+        
+        if (supplier.completedCases >= 3000) {
+            matchScore += 5;
+            reasons.push(`已成功服务${supplier.completedCases}+家企业`);
+        }
+        
+        // 认证和资质
+        if (supplier.certifications && supplier.certifications.length >= 3) {
+            matchScore += 5;
+            reasons.push(`持有${supplier.certifications.slice(0, 2).join('、')}等多项专业资质`);
         }
         
         return {
             ...supplier,
-            price: supplier.price[jurisdiction] || { service: 0, government: 0, total: 0 },
-            matchScore
+            price: priceInfo || { service: 8000, government: 2000, total: 10000 },
+            matchScore,
+            recommendReasons: reasons.slice(0, 5)  // 最多显示5个推荐理由
         };
     }).sort((a, b) => {
-        // 综合评分排序：匹配度40% + 价格30% + 评分20% + 经验10%
-        const scoreA = (a.matchScore / 100) * 0.4 + (1 - a.price.total / 10000) * 0.3 + (a.rating / 5) * 0.2 + (a.experience / 20) * 0.1;
-        const scoreB = (b.matchScore / 100) * 0.4 + (1 - b.price.total / 10000) * 0.3 + (b.rating / 5) * 0.2 + (b.experience / 20) * 0.1;
+        // 综合评分排序：匹配度50% + 价格25% + 评分15% + 经验10%
+        const scoreA = (a.matchScore / 100) * 0.5 + (1 - Math.min(a.price.total, 10000) / 10000) * 0.25 + (a.rating / 5) * 0.15 + (a.experience / 20) * 0.1;
+        const scoreB = (b.matchScore / 100) * 0.5 + (1 - Math.min(b.price.total, 10000) / 10000) * 0.25 + (b.rating / 5) * 0.15 + (b.experience / 20) * 0.1;
         return scoreB - scoreA;
     });
     
@@ -478,11 +548,19 @@ function matchSuppliers(jurisdiction, formData = {}) {
     if (filtered.length < 3) {
         const remainingSuppliers = SUPPLIERS.filter(supplier => 
             !supplier.specialties.includes(jurisdiction)
-        ).map(supplier => ({
-            ...supplier,
-            price: supplier.price[jurisdiction] || { service: 8000, government: 2000, total: 10000 },
-            matchScore: 10 // 低匹配分
-        }));
+        ).map(supplier => {
+            const priceInfo = supplier.price[jurisdiction] || { service: 8000, government: 2000, total: 10000 };
+            return {
+                ...supplier,
+                price: priceInfo,
+                matchScore: 15,  // 低匹配分
+                recommendReasons: [
+                    `虽非${JURISDICTIONS[jurisdiction]?.name}专业机构，但具备全球服务经验`,
+                    `可提供${JURISDICTIONS[jurisdiction]?.name}公司注册服务`,
+                    `${supplier.experience}年国际商务服务经验`
+                ]
+            };
+        });
         
         filtered = [...filtered, ...remainingSuppliers].slice(0, 3);
     }
